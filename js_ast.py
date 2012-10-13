@@ -196,9 +196,6 @@ class For(Statement):
             if type(elem) != NullStatement and str(elem) != "":
                 lines = str(elem).split("\n")
                 for line in lines:
-                    if str(self.target) in line:
-                        line = line.split(str(self.target))
-                        line = "{0}[{1}]".format(self.iterable, self.target).join(line)
                     string += "    {0}\n".format(line)
         return string + "}"
 
