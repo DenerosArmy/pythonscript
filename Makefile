@@ -1,6 +1,7 @@
 all: py.js programs
 
 py.js:
+	mkdir -p js
 	cat library/py-core.js > js/py.js
 	python js.py library/py-runtime.py >> js/py.js
 	python js.py library/py-builtins.py >> js/py.js
@@ -12,6 +13,7 @@ programs:
 	python js.py py/factorial.py > js/factorial.js
 	python js.py py/in_1.py > js/in_1.js
 	python js.py py/in_2.py > js/in_2.js
+	python js.py py/complicated.py > js/complicated.js
 
 clean:
 	rm js/*.js

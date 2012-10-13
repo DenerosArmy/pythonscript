@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <title>Photo Booth</title>
+		<script src="/socket.io/socket.io.js"></script>
+        <script src="video.js"></script> 	
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="complicated.js"></script>	
+  </head>
+  <body>
+			<video id="v"></video> 
+			<canvas id="c"></canvas>
+		<script>
+			var vidData = [1, 1, 1, 1];
+			
+			function changeVideo(attribute,direction) {
+				value = direction/50 ;
+				vidData[attribute] = value;
+			}
+</script> 
+<div>	
+	Brightness
+	<input type="range" min="0" max="150" value="75" step="1" onchange="changeVideo(0,this.value)" />
+	RedScale
+	<input type="range" min="0" max="150" value="75" step="1" onchange="changeVideo(1,this.value)" />
+	GreenScale
+	<input type="range" min="0" max="150" value="75" step="1" onchange="changeVideo(2,this.value)" />
+	BlueScale
+	<input type="range" min="0" max="150" value="75" step="1" onchange="changeVideo(3,this.value)" />
+</div>
+</html>
+
+
