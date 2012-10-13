@@ -71,10 +71,22 @@ def num(obj):
 @converts(ast.Call)
 def call(obj):
     func = convert(obj.func)
+    if str(func) == 'js':
+        assert len(obj.args) == 1, "Cannot call 'js' built-in with more than one argument"
+        s = obj.args[0]
+        assert type(s) == ast.Str, "Cannot call 'js' built-in with non-string argument"
+        return js_ast.RawExpression(s.s)
     args = js_ast.List(map(convert, obj.args))
-    kwargs_ = {kw.arg: convert(kw.value) for kw in obj.keywords }
-    kwargs = js_ast.Dict(kwargs_.keys(), kwargs_.values())
-    return js_ast.Call(func, js_ast.List([args, kwargs]))
+    kwargs_explicit = {kw.arg: convert(kw.value) for kw in obj.keywords }
+    kwargs_dict = obj.kwargs
+    if kwargs_explicit and kwargs_dict:
+        raise NotImplementedError, "Both explicit keyword args and kwargs dict are not permitted"
+    elif kwargs_dict:
+        kwargs = convert(kwargs_dict)
+    else:
+        kwargs = js_ast.Dict(kwargs_explicit.keys(), kwargs_explicit.values())
+    
+    return js_ast.Call(func, [args, kwargs])
 
 # <codecell>
 
@@ -116,9 +128,9 @@ def _add(obj): return js_ast.BinOp('+')
 @converts(ast.Mult)
 def _mult(obj): return js_ast.BinOp('*')
 @converts(ast.Sub)
-def _mult(obj): return js_ast.BinOp('-')
+def _sub(obj): return js_ast.BinOp('-')
 @converts(ast.Div)
-def _mult(obj): return js_ast.BinOp('/')
+def _div(obj): return js_ast.BinOp('/')
 @converts(ast.Mod)
 def _(obj): return js_ast.BinOp('%')
 @converts(ast.And)
@@ -151,36 +163,62 @@ def _print(obj):
 
 @converts(ast.FunctionDef)
 def _def(obj):
-    name = obj.name
+    name = js_ast.Name(obj.name)
     args = map(convert, obj.args.args)
+    str_args = [js_ast.Str(o.id) for o in obj.args.args]
     kwarg = obj.args.kwarg # arg kwargs go in
     vararg = obj.args.vararg # arg varargs go in
     if vararg:
         args.append(js_ast.Name(vararg))
     if kwarg:
         args.append(js_ast.Name(kwarg))
+    defaults = dict(reversed(zip(reversed(str_args), map(convert, reversed(obj.args.defaults)))))
+    #print 'Defaults', defaults
     
     assert not obj.decorator_list, "Decorators are not supported"
     body = map(convert, obj.body)
+    
+    passed_args = []
+    if kwarg:
+        passed_args.append(js_ast.Name('py.kwargs'))
+    if vararg:
+        passed_args.append(js_ast.Name('py.args'))
+    passed_args.append(js_ast.Dict(defaults.keys(), defaults.values()))
+    #print "Passed Args", passed_args
+    the_fn = js_ast.Function("", args, body)
+    passed_args.append(the_fn)
+    
+    the_def = js_ast.Call(js_ast.Name("py.def"), passed_args)
+    return js_ast.Assign(js_ast.Name(name), the_def)
 
 # <codecell>
 
-TEXT = """
-x + 2
-"""
+@converts(ast.Dict)
+def _dict(obj):
+    return js_ast.Dict(map(convert, obj.keys), map(convert, obj.values))
 
 # <codecell>
 
-t = ast.parse(TEXT)
-print ast.dump(t)
-print 'PARSED'
-print jsp(convert(t))
-print 'CONVERTED'
-print convert(t)
+@converts(ast.Str)
+def _str(obj):
+    return js_ast.Str(obj.s)
 
 # <codecell>
 
+#@converts(ast.Import)
+#def _import(obj):
+#    return js_ast.RawStatement('')
 
 # <codecell>
 
-# TODO: x * (y+z)   SAME AS (x * y) + z - > x*y+z ----- why is this wrong?
+@converts(ast.ImportFrom)
+def _importfrom(obj):
+    module = obj.module
+    assert module == 'pythonscript', "Only pythonscript module may be imported"
+    return js_ast.RawStatement('')
+
+# <codecell>
+
+@converts(ast.Return)
+def _return(obj):
+    return js_ast.Return(convert(obj.value))
