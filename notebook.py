@@ -362,10 +362,15 @@ def _for(obj):
     target_value = js_ast.Name(str(target) + "_val")
     _iter = convert(obj.iter)
     body = map(convert, obj.body)
-    a = js_ast.Assign(target_value, _iter)
-    body.insert(0, js_ast.Assign(target, js_ast.Subscript(target_value, target_idx)))
-    real_for = js_ast.RawExpression(str(a) + "\n" + str(js_ast.For(target_idx, _iter, body)))
-    return real_for
+    if type(_iter) != js_ast.Name and type(_iter) != js_ast.Attribute:
+        a = js_ast.Assign(target_value, _iter)
+        body.insert(0, js_ast.Assign(target, js_ast.Subscript(target_value, target_idx)))
+        real_for = js_ast.RawExpression(str(a) + "\n" + str(js_ast.For(target_idx, target_value, body)))
+        return real_for
+    else:
+        body.insert(0, js_ast.Assign(target, js_ast.Subscript(_iter, target_idx)))
+        return js_ast.For(target_idx, _iter, body)
+
 
 @converts(ast.Pass)
 def _pass(obj):
