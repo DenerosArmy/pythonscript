@@ -40,7 +40,7 @@ class RawExpression(Expression):
         return self.exp
 
 
-class RawStatement(statement):
+class RawStatement(Statement):
     def __init__(self, stmt):
         """
         @type exp: C{str}
@@ -100,7 +100,7 @@ class DeclareVar(Statement):
 
     def __str__(self):
         string = "var "
-        for var in variables
+        for var in variables:
             string += "{0}, ".format(var)
         return string[:-2]
 
