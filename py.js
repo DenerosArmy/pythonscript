@@ -1,12 +1,14 @@
-var Kwargs = {};
+var kwargs = {};
 var args = {}; 
 
 function compile_exception() { 
-    throw "Compile Time Error";
+   console.trace("Compile Time Error"); 
+   throw("GOOD BYE");
 };
 function runtime_exception() { 
-    throw "Run Time Error";
-}
+   console.trace("Run Time Error"); 
+   throw("GOOD BYE");
+};
 function def() { 
     if (arguments.length < 1) { 
         exception();
@@ -19,8 +21,8 @@ function def() {
     if (typeof py_defaults != "object") { 
         compile_exception();
     };
-    var accepts_args = (arguments[0] === Kwargs) || (arguments[1] === Kwargs) ;
-    var accepts_kwargs = (arguments[1] === args) || (arguments[0] === args);
+    var accepts_kwargs = (arguments[0] === kwargs) || (arguments[1] === kwargs) ;
+    var accepts_args = (arguments[1] === args) || (arguments[0] === args);
     var py_func_args = get_param_names(py_func);
     var py_num_required_args = 0;
 
@@ -30,22 +32,20 @@ function def() {
         };
         py_num_required_args++;
     };
-    if (accept_args) { 
+    if (accepts_args) { 
         py_func_args.pop();
     };
-    if (accept_kwargs) { 
+    if (accepts_kwargs) { 
         py_func_args.pop();
     };
-    function output_func(args,dict) { 
-       if (args.length < py_num_required_args) { 
-           runtime_exception();
-        };
+    function output_func(args,dict) {
        var input_args = [];
-       for (var i =0;i<py_func_args.length;i++) {
+       var i = 0;
+       for (i=0;i<py_func_args.length;i++) {
            if (i < args.length) { 
                input_args[i] = args[i];
             }
-           if (py_func_args[i] in dict) { 
+           else if (py_func_args[i] in dict) { 
                input_args[i] = dict[py_func_args[i]];
                delete dict[py_func_args[i]];
            }
@@ -55,22 +55,27 @@ function def() {
            else { 
                runtime_exception();
                 }
-            
-           delete args[i];  
-        } 
-        if (!accept_args && args.length != 0) { 
+        }
+        var rest_args = [];
+        for (i;i<args.length;i++) {
+            rest_args.push(args[i]);
+        };
+        console.log(rest_args);
+        if (!accepts_args && rest_args.length != 0) { 
             runtime_exception();
         }
-        if (!accept_kwargs && !is_empty(dict)) { 
+        if (!accepts_kwargs && !is_empty(dict)) { 
             runtime_exception();
         }
-        if (accept_args) { 
-            input_args.push(args);
+        if (accepts_args) { 
+            input_args.push(rest_args);
         }
-        if (accept_kwargs) {
+        if (accepts_kwargs) {
             input_args.push(dict);
         }
-        return output_func.apply(input_args);
+        console.log(input_args);
+        
+        return py_func.apply(this,input_args);
        
     }    
     return output_func;    
@@ -78,7 +83,14 @@ function def() {
 }
 function get_param_names(func) {
     var funStr = func.toString();
-    return funStr.slice(funStr.indexOf('(')+1, funStr.indexOf(')')).match(/([^\s,]+)/g);
+    var output = funStr.slice(funStr.indexOf('(')+1, funStr.indexOf(')')).match(/([^\s,]+)/g);
+    if (output == null) {
+        return [];
+    }
+    else { 
+        return output;
+    }
+
 }
 function is_empty(ob){
    for(var i in ob){ return false;}
@@ -86,4 +98,5 @@ function is_empty(ob){
 }
 exports.get_param_names = get_param_names;
 exports.def = def;
-
+exports.kwargs = kwargs;
+exports.args = args;
