@@ -10,13 +10,13 @@ class JavascriptASTTest(TestCase):
 
 
     def test_function(self):
-        function = Function("func", ["arg0", "arg1"], ["body0", "body1"])
-        self.assertEqual(str(function), "function func (arg0, arg1) {\n    body0;\n    body1;\n}")
+        function = Function(["arg0", "arg1"], ["body0", "body1"])
+        self.assertEqual(str(function), "function (arg0, arg1) {\n    body0;\n    body1;\n}")
 
 
     def test_function_no_args(self):
-        function = Function("func", [], ["body0", "body1"])
-        self.assertEqual(str(function), "function func () {\n    body0;\n    body1;\n}")
+        function = Function([], ["body0", "body1"])
+        self.assertEqual(str(function), "function () {\n    body0;\n    body1;\n}")
 
 
     def test_return(self):
@@ -123,7 +123,7 @@ class JavascriptASTTest(TestCase):
 
 
     def test_name(self):
-        name_node = Str("a")
+        name_node = Name("a")
         self.assertEqual(str(name_node), "a")
 
 

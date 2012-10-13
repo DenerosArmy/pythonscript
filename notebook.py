@@ -197,7 +197,7 @@ def _def(obj):
         passed_args.append(js_ast.Name('py.args'))
     passed_args.append(js_ast.Dict(defaults.keys(), defaults.values()))
     #print "Passed Args", passed_args
-    the_fn = js_ast.Function("", args, body)
+    the_fn = js_ast.Function(args, body)
     passed_args.append(the_fn)
     
     the_def = js_ast.Call(js_ast.Name("py.def"), passed_args)
@@ -242,3 +242,15 @@ def compare(obj):
     assert len(obj.ops) == 1, "Does not support multiple comparisons in one statement"
     return js_ast.Compare(convert(obj.ops[0]), convert(obj.left), convert(obj.comparators[0]))
 
+@converts(ast.While)
+def _while(obj):
+    test = obj.test
+    body = obj.body
+    return js_ast.While(convert(test), map(convert, body))
+
+@converts(ast.For)
+def _for(obj):
+    target = obj.target
+    body = obj.body
+    _iter = obj.iter
+    return js_ast.For(convert(target), convert(_iter), map(convert, body))

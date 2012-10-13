@@ -59,20 +59,18 @@ class NullStatement(Statement):
 
 
 class Function(Statement):
-    def __init__(self, name, args, body):
+    def __init__(self, args, body):
         """
-        @type name: L{Name}
         @type args: C{list}
         @param args: list of L{Name}
         @type body: C{list}
         @param body: list of L{Statement}
         """
-        self.name = name
         self.args = args
         self.body = body
 
     def __str__(self):
-        string = "function {0} (".format(self.name)
+        string = "function ("
         if len(self.args) > 0:
             for arg in self.args:
                 string += str(arg) + ", "
@@ -138,21 +136,20 @@ class Print(Statement):
 
 
 class For(Statement):
-    def __init__(self, iter_var, condition, inc, body):
+    def __init__(self, target, iterable, body):
         """
-        @type iter_var: L{Statement}
-        @type condition: L{Expression}
+        @type target: L{Name}
+        @type iterable: L{Expression}
+        @param iterable: an expression that returns an iterable object
         @type body: C{list}
         @param body: list of L{Statement}
-        @type orelse: L{Statement}
         """
-        self.iter_var = iter_var
-        self.condition = condition
+        self.target = target
+        self.iterable = iterable
         self.body = body
-        self.inc = inc
 
     def __str__(self):
-        string = "for ({0}; {1}; {2}) {{\n".format(self.iter_var, self.condition, self.inc)
+        string = "for (var {0} in {1}) {{\n".format(self.target, self.iterable)
         for elem in self.body:
             if type(elem) != NullStatement:
                 string += "    {0};\n".format(elem)
@@ -334,7 +331,7 @@ class Name(Expression):
         self.name = name
 
     def __str__(self):
-        return str(self.name)
+        return self.name
 
 class List(Expression):
     def __init__(self, elems):
