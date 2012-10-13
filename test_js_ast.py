@@ -21,7 +21,7 @@ class JavascriptASTTest(TestCase):
 
     def test_return(self):
         return_node = Return("1")
-        self.assertEqual(str(return_node), "return 1;")
+        self.assertEqual(str(return_node), "return 1")
 
 
     def test_declare_var(self):
@@ -100,6 +100,7 @@ class JavascriptASTTest(TestCase):
 
     def test_compare(self):
         op = CompareOp(">")
+        compare_node = Compare
 
 
     def test_call(self):
