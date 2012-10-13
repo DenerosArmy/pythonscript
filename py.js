@@ -2,16 +2,16 @@ var kwargs = {};
 var args = {}; 
 
 function compile_exception() { 
-   console.trace("Compile Time Error"); 
+  // console.trace("Compile Time Error"); 
    throw("GOOD BYE");
 };
 function runtime_exception() { 
-   console.trace("Run Time Error"); 
+   //console.trace("Run Time Error"); 
    throw("GOOD BYE");
 };
 function def() { 
     if (arguments.length < 1) { 
-        exception();
+        compile_exception();
     };
     var py_func = arguments[arguments.length - 1];
     var py_defaults = arguments[arguments.length - 2];
@@ -61,7 +61,6 @@ function def() {
         for (i;i<args.length;i++) {
             rest_args.push(args[i]);
         };
-        console.log(rest_args);
         if (!accepts_args && rest_args.length != 0) { 
             runtime_exception();
         }
@@ -74,7 +73,6 @@ function def() {
         if (accepts_kwargs) {
             input_args.push(dict);
         }
-        console.log(input_args);
         
         return py_func.apply(this,input_args);
        

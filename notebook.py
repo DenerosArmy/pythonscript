@@ -103,13 +103,22 @@ def num(obj):
 
 @converts(ast.Call)
 def call(obj):
-    func = convert(obj.func)
+    func_name = ""
+    temp = obj.func
+    while type(temp) == ast.Attribute:
+        func_name = str(temp.attr) + "." + func_name
+        temp = temp.value
+    func_name = str(temp.id) + "." + func_name
+    
+    func = js_ast.Name(func_name[:-1]) 
+
     if str(func) == 'js':
         assert len(obj.args) == 1, "Cannot call 'js' built-in with more than one argument"
         s = obj.args[0]
         assert type(s) == ast.Str, "Cannot call 'js' built-in with non-string argument"
         return js_ast.RawExpression(s.s)
     args = map(convert, obj.args)
+
     starargs = convert(obj.starargs)
     if args and starargs:
         assert False, "Both args and starargs not permitted" + str(args) + " " + str(starargs)
@@ -125,6 +134,9 @@ def call(obj):
         kwargs = convert(kwargs_dict)
     else:
         kwargs = js_ast.Dict(kwargs_explicit.keys(), kwargs_explicit.values())
+
+    if func_name[:3] == "js.":
+        return js_ast.Call(js_ast.Name(func_name[3:-1]), args)
     
     return js_ast.Call(func, [args, kwargs])
 
@@ -244,15 +256,13 @@ def _def(obj):
     passed_args.append(the_fn)
     
     the_def = js_ast.Call(js_ast.Name("py.def"), passed_args)
-
-    if name[:15] == "lambda_function":
-        return the_def
-    
     for decorator in reversed(obj.decorator_list):
         the_def = js_ast.Call(convert(decorator), [js_ast.List([the_def]), js_ast.Dict([], [])])
-    
 
-    return js_ast.Assign(js_ast.Name(name), the_def)
+    if str(name)[:15] == "lambda_function":
+        return the_def
+
+    return js_ast.Assign(name, the_def)
 
 # <codecell>
 
