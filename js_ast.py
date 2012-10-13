@@ -15,7 +15,7 @@ class Module(object):
     def __str__(self):
         string = ""
         for stmt in self.body:
-            if type(stmt) != NullStatement and str(stmt) != "":
+            if type(stmt) != NullStatement and str(stmt).strip() != "":
                 lines = str(stmt).split("\n")
                 for line in lines:
                     if line[-1] not in ("{", "("):

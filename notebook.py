@@ -239,7 +239,6 @@ def _def(obj):
     defaults = dict(reversed(zip(reversed(str_args), map(convert, reversed(obj.args.defaults)))))
     #print 'Defaults', defaults
     
-    assert not obj.decorator_list, "Decorators are not supported"
     local_vars = find_locals(obj.body)
 
     body = map(convert, obj.body)
@@ -256,6 +255,7 @@ def _def(obj):
     passed_args.append(the_fn)
     
     the_def = js_ast.Call(js_ast.Name("py.def"), passed_args)
+
     for decorator in reversed(obj.decorator_list):
         the_def = js_ast.Call(convert(decorator), [js_ast.List([the_def]), js_ast.Dict([], [])])
 
@@ -322,7 +322,7 @@ def _pass(obj):
 
 class InstanceMethodTransformer(ast.NodeTransformer):
     def visit_FunctionDef(self, node):
-        node.decorator_list.append(ast.Name('instancemethod', None))
+        node.decorator_list.append(ast.Name('pylib.instancemethod', None))
         return node
 
 class AssignTransformer(JsNodeVisitor):
@@ -351,6 +351,16 @@ def _class(obj):
     f = InitFinder()
     f.visit(body)
     if f.found_init:
-        print 'FOUND INIT'
-        body.append(js_ast.Call(js_ast.Name('this.__init__'), []))
-    return js_ast.Assign(js_ast.Name(name), js_ast.Function([], body))
+        body.append(js_ast.Call(js_ast.Name('this.__init__'), [js_ast.Name('args'), js_ast.Name('kwargs')]))
+
+    aux_assign = js_ast.Assign(js_ast.Name('_' + name), js_ast.Function([
+                js_ast.Name('args'),
+                js_ast.Name('kwargs')
+                ], body))
+    main_assign = js_ast.Assign(js_ast.Name(name), js_ast.Function([
+                js_ast.Name('args'),
+                js_ast.Name('kwargs')
+                ], [
+                js_ast.RawStatement("return new _"+name+"(args, kwargs)")
+                ]))
+    return js_ast.RawStatement(str(aux_assign) + '\n' + str(main_assign))

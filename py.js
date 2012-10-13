@@ -39,7 +39,8 @@ function def() {
         py_func_args.pop();
     };
     function output_func(args,dict) {
-	  console.log("args are", args);
+	  //console.log("func is", py_func);
+	  //console.log("args are", args);
        var input_args = [];
        var i = 0;
        for (i=0;i<py_func_args.length;i++) {
@@ -73,7 +74,6 @@ function def() {
         if (accepts_kwargs) {
             input_args.push(dict);
         }
-        
         return py_func.apply(this,input_args);
        
     }    
