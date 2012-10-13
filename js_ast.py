@@ -196,6 +196,9 @@ class For(Statement):
             if type(elem) != NullStatement and str(elem) != "":
                 lines = str(elem).split("\n")
                 for line in lines:
+                    if str(self.target) in line:
+                        line = line.split(str(self.target))
+                        line = "{0}[{1}]".format(self.iterable, self.target).join(line)
                     string += "    {0}\n".format(line)
         return string + "}"
 
@@ -373,6 +376,19 @@ class Str(Expression):
 
     def __str__(self):
         return '"{0}"'.format(self.value)
+
+
+class Attribute(Expression):
+    def __init__(self, value, attr):
+        """
+        @type attr: C{str}
+        @type value: C{Expression}
+        """
+        self.value = value
+        self.attr = attr
+
+    def __str__(self):
+        return "{0}.{1}".format(self.value, self.attr)
 
 
 class Name(Expression):

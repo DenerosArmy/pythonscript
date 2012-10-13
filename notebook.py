@@ -108,6 +108,11 @@ def aug_assign(obj):
 
 # <codecell>
 
+@converts(ast.Attribute)
+def attirbute(obj):
+    value = convert(obj.value)
+    return js_ast.Attribute(value, obj.attr)
+
 @converts(ast.Name)
 def name(obj):
     n = obj.id

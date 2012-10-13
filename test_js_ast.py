@@ -128,6 +128,13 @@ class JavascriptASTTest(TestCase):
         self.assertEqual(str(str_node), '"asdf"')
 
 
+    def test_attribute(self):
+        name = Name("a")
+        attr1 = Attribute(name, "b")
+        attr2 = Attribute(attr1, "c")
+        self.assertEqual(str(attr2), "a.b.c")
+
+
     def test_name(self):
         name_node = Name("a")
         self.assertEqual(str(name_node), "a")
