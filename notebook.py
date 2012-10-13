@@ -357,10 +357,12 @@ def _while(obj):
 
 @converts(ast.For)
 def _for(obj):
-    target = obj.target
-    body = obj.body
-    _iter = obj.iter
-    return js_ast.For(convert(target), convert(_iter), map(convert, body))
+    target = convert(obj.target)
+    target_idx = js_ast.Name(str(target) + "_idx")
+    _iter = convert(obj.iter)
+    body = map(convert, obj.body)
+    body.insert(0, js_ast.Assign(target, js_ast.Subscript(_iter, target_idx)))
+    return js_ast.For(target_idx, _iter, body)
 
 @converts(ast.Pass)
 def _pass(obj):
