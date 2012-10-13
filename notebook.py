@@ -50,8 +50,10 @@ def converts(cls):
 
 # <codecell>
 
-def convert(obj):
+def convert(obj, semis=True):
     if type(obj) in converters:
+        if type(obj) == ast.Module:
+            return converters[type(obj)](obj, semis)
         return converters[type(obj)](obj)
     else:
         return None
@@ -76,8 +78,8 @@ def find_locals(body):
 # <codecell>
 
 @converts(ast.Module)
-def module(obj):
-    return js_ast.Module(map(convert, obj.body))
+def module(obj, semis=True):
+    return js_ast.Module(map(convert, obj.body), semis)
 
 # <codecell>
 
@@ -93,6 +95,16 @@ def assign(obj):
 @converts(ast.Attribute)
 def attribute(obj):
     return js_ast.Name(str(convert(obj.value)) + "." + obj.attr)
+
+@converts(ast.AugAssign)
+def aug_assign(obj):
+    target = convert(obj.target)
+    op = convert(obj.op)
+    value = convert(obj.value)
+    if str(target).startswith('js.'):
+        target = js_ast.Name(str(target)[3:])
+    return js_ast.Assign(target, op, value)
+
 
 # <codecell>
 
