@@ -66,9 +66,13 @@ class Function(Statement):
 
     def __str__(self):
         string = "function {0} (".format(self.name)
-        for arg in self.args:
-            string += str(arg) + ", "
-        string = string[:-2] + ") {\n"
+        if len(self.args) > 0:
+            for arg in self.args:
+                string += str(arg) + ", "
+            string = string[:-2] + ") {\n"
+        else:
+            string += ") {\n"
+
         for stmt in self.body:
             string += "    {0};\n".format(stmt)
         string += "}"
@@ -222,17 +226,19 @@ class Bin(Expression):
 
 
 class Unary(Expression):
-    def __init__(self, op, values):
+    def __init__(self, op, value):
         """
         @type op: L{UnaryOp}
         @type values: C{list}
         @param values: list of L{Expression}
         """
         self.op = op
-        self.values = values
+        self.value = value
 
     def __str__(self):
-        return ""
+        if len(self.value.split()) == 1:
+            return "{0}{1}".format(self.op, self.value)
+        return "{0}({1})".format(self.op, self.value)
 
 
 class Dict(Expression):
@@ -266,7 +272,7 @@ class Compare(Expression):
         self.right = right
 
     def __str__(self):
-        return ""
+        return "{0} {1} {2}".format(self.left, self.op, self.right)
 
 
 class Call(Expression):
@@ -364,11 +370,11 @@ class UnaryOp(object):
         """
         @type op: C{str}
         """
-        assert op in ("!")
+        assert op in ("!", "~")
         self.op = op
 
     def __str__(self):
-        return ""
+        return self.op
 
 
 class CompareOp(object):

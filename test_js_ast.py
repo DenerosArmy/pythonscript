@@ -14,6 +14,11 @@ class JavascriptASTTest(TestCase):
         self.assertEqual(str(function), "function func (arg0, arg1) {\n    body0;\n    body1;\n}")
 
 
+    def test_function_no_args(self):
+        function = Function("func", [], ["body0", "body1"])
+        self.assertEqual(str(function), "function func () {\n    body0;\n    body1;\n}")
+
+
     def test_return(self):
         return_node = Return("1")
         self.assertEqual(str(return_node), "return 1;")
@@ -69,10 +74,19 @@ class JavascriptASTTest(TestCase):
     def test_bin(self):
         op = BinOp("+")
         bin_node = Bin(op, "4", "5")
+        self.assertEqual(str(bin_node), "4 + 5")
+        op = BinOp("-")
+        bin_node = Bin(op, "4", "5")
+        self.assertEqual(str(bin_node), "4 - 5")
 
-    def test_call(self):
-        call_node = Call("func", ["asdf", "asdf"])
-        self.assertEqual(str(call_node), "func (asdf, asdf)")
+
+    def test_unary(self):
+        op = UnaryOp("!")
+        unary_node = Unary(op, "True")
+        self.assertEqual(str(unary_node), "!True")
+        op = UnaryOp("~")
+        unary_node = Unary(op, "1 == 1")
+        self.assertEqual(str(unary_node), "~(1 == 1)")
 
 
     def test_empty_dict(self):
@@ -82,6 +96,15 @@ class JavascriptASTTest(TestCase):
     def test_dict(self):
         dict_node = Dict(["key0", "key1"], ["val0", "val1"])
         self.assertEqual(str(dict_node), "{key0:val0, key1:val1}")
+
+
+    def test_compare(self):
+        op = CompareOp(">")
+
+
+    def test_call(self):
+        call_node = Call("func", ["asdf", "asdf"])
+        self.assertEqual(str(call_node), "func (asdf, asdf)")
 
 
     def test_empty_list(self):
