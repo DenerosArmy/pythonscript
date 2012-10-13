@@ -1,6 +1,6 @@
 drawTimeout = None
-js.document.addEventListener('DOMContentLoaded',lambda_function1,False)
 vidData = [1,1,1,1]
+
 def lambda_function1():
     def lambda_function2():
         global cw, ch
@@ -20,6 +20,8 @@ def lambda_function1():
     cw = None
     ch = None
     v.addEventListener('play',lambda_function2,False)
+
+js.document.addEventListener('DOMContentLoaded',lambda_function1,False)
 
 def draw(v,c,bc,w,h,value):
     if (v.paused or v.ended):return False 
