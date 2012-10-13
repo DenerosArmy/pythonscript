@@ -4,11 +4,12 @@ pylib = js('require("./pylib")')
 
 class Foo(object):
     def __init__(self, x):
+        self.x = x
         print 'initing', x
-    def method(self, x ,y):
-        print x, y
+    def print_x(self):
+        print self.x
 
 f = Foo(2)
-f.method(0, 0)
+f.print_x()
 
 
