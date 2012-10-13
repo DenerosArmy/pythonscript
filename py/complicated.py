@@ -3,6 +3,7 @@ js.document.addEventListener('DOMContentLoaded',lambda_function1,False)
 vidData = [1,1,1,1]
 def lambda_function1():
     def lambda_function2():
+        global cw, ch
         cw = v.clientWidth
         ch = v.clientHeight
         canvas.width = cw
