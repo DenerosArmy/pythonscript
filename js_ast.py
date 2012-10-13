@@ -49,7 +49,7 @@ class Function(Statement):
         string = string[:-2] + ") {\n"
         for stmt in self.body:
             string += "    {0};\n".format(stmt)
-        string += "}\n"
+        string += "}"
         return string
 
 
@@ -148,7 +148,10 @@ class Bool(Expression):
         self.values = values
 
     def __str__(self):
-        return ""
+        string = ""
+        for val in self.values:
+            string += "{0} {1} ".format(val, self.op)
+        return string[:-3]
 
 
 class Bin(Expression):
@@ -163,7 +166,7 @@ class Bin(Expression):
         self.right = right
 
     def __str__(self):
-        return ""
+        return "{0} {1} {2}".format(self.left, self.op, self.right)
 
 
 class Unary(Expression):
@@ -230,7 +233,7 @@ class Num(Expression):
         self.value = value
 
     def __str__(self):
-        return ""
+        return str(self.value)
 
 
 class Str(Expression):
@@ -252,7 +255,7 @@ class Name(Expression):
         self.name = name
 
     def __str__(self):
-        return ""
+        return str(self.name)
 
 class List(Expression):
     def __init__(self, elem):
@@ -275,7 +278,7 @@ class BoolOp(object):
         self.op = op
 
     def __str__(self):
-        return ""
+        return str(self.op)
 
 
 class BinOp(object):
@@ -287,7 +290,7 @@ class BinOp(object):
         self.op = op
 
     def __str__(self):
-        return ""
+        return str(self.op)
 
 
 class UnaryOp(object):
