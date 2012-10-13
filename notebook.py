@@ -139,6 +139,18 @@ def _and(obj): return js_ast.BoolOp('&&')
 def _or(obj): return js_ast.BoolOp('||')
 @converts(ast.Not)
 def _not(obj): return js_ast.UnaryOp('!')
+@converts(ast.Eq)
+def _eq(obj): return js_ast.CompareOp('==')
+@converts(ast.NotEq)
+def _neq(obj): return js_ast.CompareOp('!=')
+@converts(ast.Lt)
+def _lt(obj): return js_ast.CompareOp('<')
+@converts(ast.LtE)
+def _lte(obj): return js_ast.CompareOp('<=')
+@converts(ast.Gt)
+def _gt(obj): return js_ast.CompareOp('>')
+@converts(ast.GtE)
+def _gte(obj): return js_ast.CompareOp('>=')
 
 # <codecell>
 
@@ -215,10 +227,18 @@ def _str(obj):
 def _importfrom(obj):
     module = obj.module
     assert module == 'pythonscript', "Only pythonscript module may be imported"
-    return js_ast.RawStatement('')
+    return js_ast.NullStatement()
 
 # <codecell>
 
 @converts(ast.Return)
 def _return(obj):
     return js_ast.Return(convert(obj.value))
+
+# <codecell>
+
+@converts(ast.Compare)
+def compare(obj):
+    assert len(obj.ops) == 1, "Does not support multiple comparisons in one statement"
+    return js_ast.Compare(convert(obj.ops[0]), convert(obj.left), convert(obj.comparators[0]))
+
