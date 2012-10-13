@@ -49,7 +49,19 @@ class tuple(object):
         res = res + ')' # TODO: why does += not work here?
         return res
 
+def range(start, stop=None, step=1):
+    if stop == None:
+        stop = start
+        start = 0
+    res = []
+    a = start
+    while a+step <= stop:
+        js("res[res.length] = a;")
+        a = a + step
+    return res
+
 js.exports.len = len
 js.exports.iter = iter
 js.exports.str = str
 js.exports.tuple = tuple
+js.exports.range = range
