@@ -33,7 +33,7 @@
     <!--[if IE 7]>
       <link rel="stylesheet" href="assets/css/font-awesome-ie7.css">
     <![endif]-->
-
+    <script src="/static/py_web.js"></script>
     <style type="text/css">
 #editor, #editor2 {
     position: absolute;
@@ -71,9 +71,10 @@
     if n > 1:
         return n * factorial(n-1)
     else:
-        return 0
+        return 1
 
-print "The factorial of 10 is", factorial(10)</div>
+print "The factorial of 10 is", factorial(10)
+js.alert(factorial(10))</div>
                     </div>
                 </div>
 
@@ -81,16 +82,7 @@ print "The factorial of 10 is", factorial(10)</div>
                 <h3 class="font-bree-serif">Javascript</h3>
                     <div style="position:relative; height: 200px; ">
                         &nbsp;
-                        <div id="editor2" style="margin-top:-18px" >factorial = py.def ({}, function (n) {
-    if (n > 1) {
-        return n * factorial ([n - 1], {});
-    } else {
-        return 0;
-    };
-});
-console.log ("The factorial of 10 is", factorial ([10], {}));
-
-</div>
+                        <div id="editor2" style="margin-top:-18px" ></div>
                     </div>
                    
                 </div>
@@ -101,18 +93,35 @@ console.log ("The factorial of 10 is", factorial ([10], {}));
                     
                     
                     
-                    <script src="http://sumukh.me/pythons/assets/js/ace/ace/ace.js" type="text/javascript" charset="utf-8">
-</script> <script src="http://sumukh.me/pythons/assets/js/ace/ace/theme-twilight.js" type="text/javascript" charset="utf-8">
-</script> <script src="http://sumukh.me/pythons/assets/js/ace/ace/mode-python.js" type="text/javascript" charset="utf-8">
+                    <script src="/static/assets/js/ace/ace/ace.js" type="text/javascript" charset="utf-8">
+</script> <script src="/static/assets/js/ace/ace/theme-twilight.js" type="text/javascript" charset="utf-8">
+</script> <script src="/static/assets/js/ace/ace/mode-python.js" type="text/javascript" charset="utf-8">
 
 
 
 </script> 
                     <script type="text/javascript">
+                        var editor2 = ace.edit("editor2");
+
+                        function evals()
+                        {
+                        var text = editor2.getSession().getValue();
+                        value = eval(text);
+                        
+
+                        }
+
+ 
+
+                    </script>
+
+                    <script type="text/javascript">
                         var editor = ace.edit("editor");
 
 	                    function postserver()
 	                    {
+                                                    $('<p align="center"><a  href="javascript:void(0)" onclick="javascript:evals();" style="margin-top: 5px" class="btn tip  btn-success btn-large font-open-sans-normal" id="eval" title="Press to evaluate your JS code" >Evaluate <i class="icon-ok"></i></a></p>').hide().appendTo('#content2').fadeIn("medium");
+
                         var text = editor.getSession().getValue();
 		                $.get("/api", {"code":text }, function(data) {
                             var editor2 = ace.edit("editor2");
@@ -139,7 +148,6 @@ window.onload = function() {
 	                    var text = editor.getSession().getValue();
 	                    editor2.getSession().setValue("//Press Submit Below");
 	                    if(button == 0){
-                        $('<p align="center"><a  href="javascript:void(0)" onclick="javascript:postserver();" style="margin-top: 5px" class="btn tip  btn-success btn-large font-open-sans-normal" id="eval" title="Press to evaluate your JS code" >Evaluate <i class="icon-ok"></i></a></p>').hide().appendTo('#content2').fadeIn("medium");
 
 	                    	                    button = 1
 	                    	                    }
