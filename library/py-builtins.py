@@ -46,7 +46,7 @@ class tuple(object):
                   res += '' + self._items[index] + ','
               }
               """)
-        res = res + ')' # TODO: why does += not work here?
+        res +=  ')'
         return res
 
 def range(start, stop=None, step=1):
@@ -57,7 +57,7 @@ def range(start, stop=None, step=1):
     a = start
     while a+step <= stop:
         js("res[res.length] = a;")
-        a = a + step
+        a += step
     return res
 
 js.exports.len = len
