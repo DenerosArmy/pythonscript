@@ -85,11 +85,14 @@ def module(obj):
 def assign(obj):
     assert len(obj.targets) == 1, "Multi-assignment not supported"
     assert type(obj.targets) != ast.Tuple, "Tuple assignment not supported"
-    return js_ast.Assign(convert(obj.targets[0]), convert(obj.value))
+    target = convert(obj.targets[0])
+    if str(target).startswith('js.'):
+        target = js_ast.Name(str(target)[3:])
+    return js_ast.Assign(target, convert(obj.value))
 
 @converts(ast.Attribute)
 def attribute(obj):
-    return js_ast.Name(obj.value.id + "." + obj.attr)
+    return js_ast.Name(str(convert(obj.value)) + "." + obj.attr)
 
 # <codecell>
 
@@ -332,9 +335,13 @@ def _for(obj):
 def _pass(obj):
     return js_ast.NullStatement()
 
+@converts(ast.List)
+def _list(obj):
+    return js_ast.List(map(convert, obj.elts))
+
 class InstanceMethodTransformer(ast.NodeTransformer):
     def visit_FunctionDef(self, node):
-        node.decorator_list.append(ast.Name('pylib.instancemethod', None))
+        node.decorator_list.append(ast.Name('py.instancemethod', None))
         return node
 
 class AssignTransformer(JsNodeVisitor):

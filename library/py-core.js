@@ -99,3 +99,7 @@ exports.get_param_names = get_param_names;
 exports.def = def;
 exports.kwargs = kwargs;
 exports.args = args;
+py = {}
+py.def = def;
+py.kwargs = kwargs;
+py.args = args;

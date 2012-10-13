@@ -1,5 +1,5 @@
 from notebook import convert
-import sys
+import sys, os
 import ast
 
 if __name__ == '__main__':
@@ -8,6 +8,6 @@ if __name__ == '__main__':
         exit(1)
 
     filename = sys.argv[1]
-    with open(filename) as f:
+    with open(os.path.abspath(filename)) as f:
         t = ast.parse(f.read(), filename)
         print convert(t)
