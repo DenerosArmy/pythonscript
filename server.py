@@ -10,8 +10,6 @@ app.debug = True
 @app.route("/api", methods=['GET', 'POST'])
 def hello():
     contents = request.args['code'];
-    response.headers['Access-Control-Allow-Origin'] = origin
-    response.headers['Access-Control-Allow-Credentials'] = 'true'
     return "eval({0})".format(str(request.args['code']).strip());
     """ 
     t = ast.parse(str(request.args['code']))
@@ -20,7 +18,7 @@ def hello():
     """
 @app.route("/", methods=['GET', 'POST']) 
 def test():
-    return render_template('view.html')
+    return render_template('index.html')
 
 if __name__ == "__main__":
     app.run()

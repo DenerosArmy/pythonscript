@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>JS.py</title>
+    <meta name="description" content="Javascript To Python">
+    <meta name="author" content="denerosarmy">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><!-- Styles -->
+    <link href="http://sumukh.me/pythons/assets/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="http://sumukh.me/pythons/assets/css/bootstrap-responsive.css" rel="stylesheet" type="text/css">
+    <link href="http://sumukh.me/pythons/assets/css/style.css" rel="stylesheet" type="text/css">
+    <link href="http://sumukh.me/pythons/assets/css/font-awesome.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300%7CBree+Serif" rel="stylesheet" type="text/css">
+    <link href="http://sumukh.me/pythons/assets/js/google-code-prettify/prettify.css" rel="stylesheet" type="text/css"><!--[if IE]>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:600italic" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:700italic" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:600" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Bree+Serif:400" rel="stylesheet" type="text/css">
+    <![endif]-->
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if IE 7]>
+      <link rel="stylesheet" href="assets/css/font-awesome-ie7.css">
+    <![endif]-->
+
+    <style type="text/css">
+#editor, #editor2 {
+    position: absolute;
+    width: 100%;
+    height: 200px;
+    }
+    </style>
+</head>
+
+<body>
+    <header class="masthead">
+        <div class="container">
+            <a href="#" id="brand">JS.py</a>
+
+            <h1 class="font-bree-serif">Python to Javascript</h1>
+
+            <p class="font-open-sans-normal">Write Python code that runs in a web browser as JS</p>
+
+            <p class="jumbo"><a href="https://github.com/DenerosArmy/pythonscript" target="_blank" class="btn btn-inverse btn-large font-open-sans-normal"><strong>View on GitHub</strong> <small>(v1.0.0)</small></a> <a href="#" class="btn btn-success btn-large font-open-sans-normal"><strong>Demo JS.py</strong></a></p><a href="https://twitter.com/share" class="twitter-share-button" data-text="Use Python to generate Javascript that runs in a browser." data-via="sumukhsridhara" data-size="large" data-dnt="true">Tweet</a> <script type="text/javascript">
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="http://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+            </script>
+            <p>
+        </div><!--end container-->
+    </header>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="row" id="content2">
+            
+                <div class="span6">
+                <h3 class="font-bree-serif">Python</h3>
+                    <div style="position:relative; height: 200px; ">
+                        &nbsp;
+                        <div id="editor">from pythonscript import js
+js('var py = require("./py")')
+js('console.log("Test in_1");')
+def foo(x, y=1, **kwargs):
+    print x+y
+foo(**{'x': 1, 'y': 2})
+js('console.log("End test in_1");')</div>
+                    </div>
+                </div>
+
+                <div class="span6" >
+                <h3 class="font-bree-serif">Javascript</h3>
+                    <div style="position:relative; height: 200px; ">
+                        &nbsp;
+                        <div id="editor2" style="margin-top:-18px" >var py = require("./py");
+console.log("Test in_1");
+foo = py.def (py.kwargs, {"y":1}, function  (x, y, kwargs) {
+    console.log (x + y);
+});
+foo ([], {"x":1, "y":2});
+console.log("End test in_1");</div>
+                    </div>
+                   
+                </div>
+              
+            </div> <hr>
+            
+
+                    
+                    
+                    
+                    <script src="assets/js/ace/ace/ace.js" type="text/javascript" charset="utf-8">
+</script> <script src="assets/js/ace/ace/theme-twilight.js" type="text/javascript" charset="utf-8">
+</script> <script src="assets/js/ace/ace/mode-python.js" type="text/javascript" charset="utf-8">
+
+
+
+</script> 
+                    <script type="text/javascript">
+                        var editor = ace.edit("editor");
+	                    var text = editor.getSession().getValue();
+	                    function postserver()
+	                    {
+		                $.post("", text);
+
+	                    }
+ 
+
+                    </script>
+
+
+<script type="text/javascript">
+window.onload = function() {
+                    var editor2 = ace.edit("editor2");
+                    editor2.setTheme("ace/theme/twilight");
+                    editor2.getSession().setMode("ace/mode/javascript");
+                    var button = 0;
+                    var editor = ace.edit("editor");
+                    editor.setTheme("ace/theme/twilight");
+                    editor.getSession().setMode("ace/mode/python");
+                    editor.getSession().on('change', function(){
+	                    var text = editor.getSession().getValue();
+	                    editor2.getSession().setValue("//Press Submit Below");
+	                    if(button == 0){
+	                    	                    $('<p align="center"><a  href="javascript:void(0)" onclick="javascript:postserver();" style="margin-top: 5px" class="btn tip  btn-primary btn-large font-open-sans-normal" id="sendtovaishaal" title="Press to translate your python code" >Translate <i class="icon-ok">  </a></p>').hide().appendTo('#content2').fadeIn("medium");
+	                    	                    button = 1
+	                    	                    }
+
+	                      var continue_button = document.getElementById('sendtovaishaal');
+	                      $('#sendtovaishaal').fadeIn('slow', function() {
+        // Animation complete
+        					});
+	                      //continue_button.style.visibility = 'visible';                
+	                    
+	                });
+
+
+                    };
+                    </script>
+                    
+
+<div class="row" id="content">
+
+                <div class="span12">
+                    <div class="tab-pane" id="howtouse">
+                        <section class="sec-header">
+                            <h3 class="font-bree-serif">Install</h3>
+
+                            <p>Download <strong>JS.py</strong> using <code><abbr title="git clone">git clone</abbr></code> or by downloading the zip file from git hub.</p>
+                            <pre class="prettyprint linenums">
+git clone https://github.com/DenerosArmy/pythonscript.git 
+</pre>
+                        </section>
+
+                        <section class="sec-header">
+                            <h3 class="font-bree-serif">Run an Example</h3>
+
+                            <p>Open your <code>terminal</code> and navigate to the <code><abbr title="&lt;body&gt;">pythonscript</abbr></code> folder then enter this command</p>
+
+                            <p>Please note that you must use Python 2.7</p>
+                            <pre class="prettyprint linenums">
+python js.py min_1.py
+</pre>
+
+                            <p><strong>Output:</strong></p>
+                            <pre class="prettyprint linenums">
+var py = require("./py");
+console.log("Test in_1");;
+foo = py.def (py.kwargs, {"y":1}, function  (x, y, kwargs) {
+    console.log (x + y);
+});
+foo ([], {"x":1, "y":2});
+console.log("End test in_1");;
+</pre>
+                        </section>
+
+                        <section class="sec-header">
+                            <h3 class="font-bree-serif">Formatting</h3>
+                            <p>Add the following markup</p>
+                            <pre class="prettyprint linenums">from pythonscript import js
+js('var py = require("./py")')
+js('console.log("Test in_1");')
+def foo(x, y=1, **kwargs):
+    print x+y
+foo(**{'x': 1, 'y': 2})
+js('console.log("End test in_1");')
+</pre>
+                        </section>
+
+                        <section class="sec-header">
+                            <h3 class="font-bree-serif">Usage</h3>
+
+                            <p>Save the generated JS file and use the <code><abbr title="&lt;script&gt;">&lt;script src='yourpy.js'&gt;</abbr></code> tag (in your html <code>HEAD</code> section), then use the JS like any other function. You can even use jQuery functions (see the docs) :</p>
+                            <pre class="prettyprint linenums">
+&lt;script&gt;
+$(document).ready(function () {
+  $('.selector').aPlugin();
+});
+&lt;/script&gt;
+</pre>
+                        </section>
+                    </div><!--end howtouse-content-->
+
+
+                    <div class="well align-center">
+                        <h4>For any queries or issues. <a href="#">Submit issues</a> on github</h4>
+                    </div><!--end well-->
+                </div><!--end span12-->
+            </div><!--end row-->
+        </div><!--end container-->
+    </div><!--end main-content-->
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="span6">
+                    <p>&copy; Using Plugin-Documentation. </p>
+                </div>
+
+                <div class="span2 offset4">
+                    <p><a href="#" id="top">Go To Top</a></p>
+                </div><!--end span2-->
+            </div><!--end row-->
+        </div><!--end container-->
+    </footer><!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://sumukh.me/pythons/assets/js/jquery.js" type="text/javascript">
+</script><script src="http://sumukh.me/pythons/assets/js/bootstrap.min.js" type="text/javascript">
+</script><script src="http://sumukh.me/pythons/assets/js/google-code-prettify/prettify.js" type="text/javascript">
+</script><script type="text/javascript" src="http://sumukh.me/pythons/assets/js/respond.js">
+</script><script type="text/javascript">
+$(function(){
+    //Load Goodle Code Pretiffy        
+    window.prettyPrint && prettyPrint();
+    //Tab function
+    $('#pluginTab a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+    //FAQ autosuggest
+    $('.typeahead').typeahead();
+    //tooltip init
+    $("a.tip").tooltip();   
+    //footer link to got top
+    gotoTop();
+    function gotoTop(){
+         // scroll body to 0px on click
+            $('a#top').on('click',function () {
+                $('body,html').animate({
+                    scrollTop: 0
+                }, 800);
+                return false;
+            });
+     };
+    });
+    </script><!-- Localized -->
+</body>
+</html>
