@@ -15,7 +15,7 @@ class Module(object):
     def __str__(self):
         string = ""
         for stmt in self.body:
-            string += "{0}\n".format(stmt)
+            string += "{0};\n".format(stmt)
         return string
 
 
@@ -115,14 +115,14 @@ class Assign(Statement):
 
 
 class Print(Statement):
-    def __init__(self, values):
+    def __init__(self, value):
         """
-        @type value: C{str}
+        @type value: anything that can be printed
         """
-        self.values = values
+        self.value = value
 
     def __str__(self):
-        return "console.log({0});".format(self.values)
+        return "console.log({0})".format(self.value)
 
 
 class For(Statement):
@@ -305,7 +305,7 @@ class Str(Expression):
         self.value = value
 
     def __str__(self):
-        return self.value
+        return '"{0}"'.format(self.value)
 
 
 class Name(Expression):
@@ -340,7 +340,7 @@ class BoolOp(object):
         """
         @type op: C{str}
         """
-        assert op in ("||", "$$")
+        assert op in ("||", "&&")
         self.op = op
 
     def __str__(self):
