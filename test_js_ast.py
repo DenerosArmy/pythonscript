@@ -18,9 +18,12 @@ class JavascriptASTTest(TestCase):
 
     def test_for(self):
         for_node = For("i=0", "i<10", "i++", ["func()"])
-        print for_node
         self.assertEqual(str(for_node), "for (i=0; i<10; i++) {\n    func();\n}")
 
     def test_call(self):
         call_node = Call("func", ["asdf", "asdf"])
         self.assertEqual(str(call_node), "func (asdf, asdf)")
+
+    def test_dict(self):
+        dict_node = Dict(["key0", "key1"], ["val0", "val1"])
+        self.assertEqual(str(dict_node), "{key0:val0, key1:val1}")

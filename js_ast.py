@@ -67,7 +67,7 @@ class Function(Statement):
     def __str__(self):
         string = "function {0}(".format(self.name)
         for arg in self.args:
-            string += arg + ", "
+            string += str(arg) + ", "
         string = string[:-2] + ") {\n"
         for stmt in self.body:
             string += "    {0};\n".format(stmt)
@@ -246,8 +246,10 @@ class Dict(Expression):
         self.values = values
 
     def __str__(self):
-
-        return ""
+        string = "{"
+        for i in xrange(len(self.keys)):
+            string += "{0}:{1}, ".format(self.keys[i], self.values[i])
+        return string[:-2] + "}"
 
 
 class Compare(Expression):
@@ -268,7 +270,7 @@ class Compare(Expression):
 class Call(Expression):
     def __init__(self, func, args):
         """
-        @type func: L{Function}
+        @type func: L{Name}
         @type args: C{list}
         @param args: list of L{Expression}
         """
@@ -278,7 +280,7 @@ class Call(Expression):
     def __str__(self):
         string = "{0} (".format(self.func)
         for arg in self.args:
-            string += arg + ", "
+            string += str(arg) + ", "
         return string[:-2] + ")"
 
 
