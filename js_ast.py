@@ -331,7 +331,7 @@ class Name(Expression):
         self.name = name
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 class List(Expression):
     def __init__(self, elems):
