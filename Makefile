@@ -1,6 +1,7 @@
 all: py.js programs
 
 py.js:
+	mkdir -p js
 	cat library/py-core.js > js/py.js
 	python js.py library/py-runtime.py >> js/py.js
 	python js.py library/py-builtins.py >> js/py.js
