@@ -15,7 +15,8 @@ class Module(object):
     def __str__(self):
         string = ""
         for stmt in self.body:
-            string += "{0};\n".format(stmt)
+            if type(stmt) != NullStatement:
+                string += "{0};\n".format(stmt)
         return string
 
 
@@ -51,6 +52,12 @@ class RawStatement(Statement):
         return self.stmt
 
 
+class NullStatement(Statement):
+    def __str__(self):
+        return ""
+    pass
+
+
 class Function(Statement):
     def __init__(self, name, args, body):
         """
@@ -74,7 +81,8 @@ class Function(Statement):
             string += ") {\n"
 
         for stmt in self.body:
-            string += "    {0};\n".format(stmt)
+            if type(stmt) != NullStatement:
+                string += "    {0};\n".format(stmt)
         string += "}"
         return string
 
@@ -146,7 +154,8 @@ class For(Statement):
     def __str__(self):
         string = "for ({0}; {1}; {2}) {{\n".format(self.iter_var, self.condition, self.inc)
         for elem in self.body:
-            string += "    {0};\n".format(elem)
+            if type(elem) != NullStatement:
+                string += "    {0};\n".format(elem)
         return string + "}"
 
 
@@ -163,7 +172,8 @@ class While(Statement):
     def __str__(self):
         string = "while ({0}) {{\n".format(self.condition)
         for elem in self.body:
-            string += "    {0};\n".format(elem)
+            if type(elem) != NullStatement:
+                string += "    {0};\n".format(elem)
         return string + "}"
 
 
@@ -183,11 +193,13 @@ class If(Statement):
     def __str__(self):
         string = "if ({0}) {{\n".format(self.condition)
         for elem in self.if_body:
-            string += "    {0};\n".format(elem)
+            if type(elem) != NullStatement:
+                string += "    {0};\n".format(elem)
         if self.else_body:
             string += "} else {\n"
             for elem in self.else_body:
-                string += "    {0};\n".format(elem)
+                if type(elem) != NullStatement:
+                    string += "    {0};\n".format(elem)
         return string + "}"
 
 
