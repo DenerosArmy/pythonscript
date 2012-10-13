@@ -60,15 +60,21 @@ class Return(Statement):
         """
         self.value = value
 
+    def __str(self):
+        return "return {0};".format(self.value)
+
 
 class Assign(Statement):
     def __init__(self, target, value):
         """
-        @type target: L{Expression}
+        @type target: L{Name}
         @type value: L{Expression}
         """
         self.target = target
         self.value = value
+
+    def __str__(self):
+        return "{0} = {1}".format(self.target, self.value)
 
 
 class Print(Statement):
@@ -77,6 +83,9 @@ class Print(Statement):
         @type value: C{str}
         """
         self.values = values
+
+    def __str__(self):
+        return ""
 
 
 class For(Statement):
@@ -93,6 +102,9 @@ class For(Statement):
         self.body = body
         self.orelse = orelse
 
+    def __str__(self):
+        return ""
+
 
 class While(Statement):
     def __init__(self, condition, body):
@@ -103,6 +115,9 @@ class While(Statement):
         """
         self.condition = condition
         self.body = body
+
+    def __str__(self):
+        return ""
 
 
 class If(Statement):
@@ -118,6 +133,9 @@ class If(Statement):
         self.if_body = if_body
         self.else_body = else_body
 
+    def __str__(self):
+        return ""
+
 
 class Bool(Expression):
     def __init__(self, op, values):
@@ -129,6 +147,9 @@ class Bool(Expression):
         self.op = op
         self.values = values
 
+    def __str__(self):
+        return ""
+
 
 class Bin(Expression):
     def __init__(self, op, left, right):
@@ -137,6 +158,12 @@ class Bin(Expression):
         @type left: L{Expression}
         @type right: L{Expression}
         """
+        self.op = op
+        self.left = left
+        self.right = right
+
+    def __str__(self):
+        return ""
 
 
 class Unary(Expression):
@@ -149,6 +176,9 @@ class Unary(Expression):
         self.op = op
         self.values = values
 
+    def __str__(self):
+        return ""
+
 
 class Dict(Expression):
     def __init__(self, keys, values):
@@ -158,6 +188,9 @@ class Dict(Expression):
         """
         self.keys = keys
         self.values = values
+
+    def __str__(self):
+        return ""
 
 
 class Compare(Expression):
@@ -171,6 +204,9 @@ class Compare(Expression):
         self.left = left
         self.right = right
 
+    def __str__(self):
+        return ""
+
 
 class Call(Expression):
     def __init__(self, func, args):
@@ -182,6 +218,9 @@ class Call(Expression):
         self.func = func
         self.args = args
 
+    def __str__(self):
+        return ""
+
 
 class Num(Expression):
     def __init__(self, value):
@@ -189,6 +228,9 @@ class Num(Expression):
         @type value: C{int} or C{float}
         """
         self.value = value
+
+    def __str__(self):
+        return ""
 
 
 class Str(Expression):
@@ -198,6 +240,9 @@ class Str(Expression):
         """
         self.value = value
 
+    def __str__(self):
+        return ""
+
 
 class Name(Expression):
     def __init__(self, name):
@@ -206,6 +251,8 @@ class Name(Expression):
         """
         self.name = name
 
+    def __str__(self):
+        return ""
 
 class List(Expression):
     def __init__(self, elem):
@@ -215,6 +262,8 @@ class List(Expression):
         """
         self.elem = elem
 
+    def __str__(self):
+        return ""
 
 
 class BoolOp(object):
@@ -225,6 +274,9 @@ class BoolOp(object):
         assert op in ("||", "$$")
         self.op = op
 
+    def __str__(self):
+        return ""
+
 
 class BinOp(object):
     def __init__(self, op):
@@ -233,6 +285,9 @@ class BinOp(object):
         """
         assert op in ("+", "-", "*", "/", "%")
         self.op = op
+
+    def __str__(self):
+        return ""
 
 
 class UnaryOp(object):
@@ -243,6 +298,9 @@ class UnaryOp(object):
         assert op in ("!")
         self.op = op
 
+    def __str__(self):
+        return ""
+
 
 class CompareOp(object):
     def __init__(self, op):
@@ -251,3 +309,6 @@ class CompareOp(object):
         """
         assert op in ("==", "===", "!=", "!==", ">", "<", ">=", "<=")
         self.op = op
+
+    def __str__(self):
+        return ""
