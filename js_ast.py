@@ -4,6 +4,15 @@ TryCatch(Statement)
 """
 
 
+class Module(object):
+    def __init__(self, body):
+        """
+        @type body: C{list}
+        @param body: list of C{Statement}
+        """
+        self.body = body
+
+
 class Expression(object):
     def __init__(self):
         pass
@@ -200,10 +209,28 @@ class BoolOp(object):
         self.op = op
 
 
+class BinOp(object):
+    def __init__(self, op):
+        """
+        @type op: C{str}
+        """
+        assert op in ("+", "-", "*", "/", "%")
+        self.op = op
+
+
 class UnaryOp(object):
     def __init__(self, op):
         """
         @type op: C{str}
         """
         assert op in ("!")
+        self.op = op
+
+
+class CompareOp(object):
+    def __init__(self, op):
+        """
+        @type op: C{str}
+        """
+        assert op in ("==", "===", "!=", "!==", ">", "<", ">=", "<=")
         self.op = op
