@@ -19,22 +19,17 @@ class tuple(object):
     def __len__(self):
         if self._len == -1:
             count = 0
-            js("""for (var index in self._items) {
-                count += 1;
-            }
-            """)
+            for elem in self._items:
+                count += 1
             self._len = count
             return count
         else:
             return self._len
 
     def __contains__(self, item):
-        js("""for (var index in self._items) {
-                  if (item === self._items[index]) {
-                      return true;
-                  }
-              }
-              """)
+        for other in self._items:
+            if item == other:
+                return True
         return False
 
     def __iter__(self):
@@ -42,10 +37,8 @@ class tuple(object):
 
     def __str__(self):
         res = "("
-        js("""for (var index in self._items) {
-                  res += '' + self._items[index] + ','
-              }
-              """)
+        for item in self._items:
+            res += '' + item + ','
         res +=  ')'
         return res
 
@@ -56,7 +49,7 @@ def range(start, stop=None, step=1):
     res = []
     a = start
     while a+step <= stop:
-        js("res[res.length] = a;")
+        res[res.length] = a
         a += step
     return res
 

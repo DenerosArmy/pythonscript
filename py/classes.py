@@ -21,6 +21,7 @@ print "Tuple iteratior is:", py.iter(t)
 print "Tuple string is:", py.str(t)
 
 print "Range(0, 50, 2)", py.range(0, 50, 2)
+print "Range(5, 10, 2)", py.range(5, 10)
 
 
 # t = list([1, 2, 3, 4])
