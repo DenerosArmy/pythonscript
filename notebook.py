@@ -119,6 +119,10 @@ def call(obj):
         return js_ast.RawExpression(s.s)
     args = map(convert, obj.args)
 
+    if func_name[:3] == "js.":
+        assert (not obj.starargs) and (not obj.keywords) and (not obj.kwargs), "JS built-ins only take positional arguments"
+        return js_ast.Call(js_ast.Name(func_name[3:-1]), args)
+
     starargs = convert(obj.starargs)
     if args and starargs:
         assert False, "Both args and starargs not permitted" + str(args) + " " + str(starargs)
@@ -135,9 +139,6 @@ def call(obj):
     else:
         kwargs = js_ast.Dict(kwargs_explicit.keys(), kwargs_explicit.values())
 
-    if func_name[:3] == "js.":
-        return js_ast.Call(js_ast.Name(func_name[3:-1]), args)
-    
     return js_ast.Call(func, [args, kwargs])
 
 # <codecell>
