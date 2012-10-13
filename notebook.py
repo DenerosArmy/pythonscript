@@ -62,7 +62,8 @@ class Visitor(ast.NodeVisitor):
     local_vars = []
     def visit_Assign(self, node):
         for target in node.targets:
-            self.local_vars.append(target.id)
+            if isinstance(target, ast.Name):
+                self.local_vars.append(target.id)
 
     def visit_For(self, node):
         self.local_vars.append(node.target.id)
