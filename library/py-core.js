@@ -41,6 +41,9 @@ function def() {
     function output_func(args,dict) {
 	  //console.log("func is", py_func);
 	  //console.log("args are", args);
+      if (arguments.length == 0) {
+          return output_func([],{});
+       }
        var input_args = [];
        var i = 0;
        for (i=0;i<py_func_args.length;i++) {
