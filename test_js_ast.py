@@ -100,12 +100,21 @@ class JavascriptASTTest(TestCase):
 
     def test_compare(self):
         op = CompareOp(">")
-        compare_node = Compare
+        compare_node = Compare(op, "1", "2")
+        self.assertEqual(str(compare_node), "1 > 2")
+        op = CompareOp("==")
+        compare_node = Compare(op, "1", "2")
+        self.assertEqual(str(compare_node), "1 == 2")
 
 
     def test_call(self):
         call_node = Call("func", ["asdf", "asdf"])
         self.assertEqual(str(call_node), "func (asdf, asdf)")
+
+
+    def test_num(self):
+        num_node = Num(9)
+        self.assertEqual(str(num_node), "9")
 
 
     def test_empty_list(self):
