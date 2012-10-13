@@ -5,6 +5,7 @@ def instancemethod(fn):
     def the_fn(*args, **kwargs):
         return fn(*js('[this].concat(args)'), **kwargs)
     return the_fn
+js.py.instancemethod = instancemethod
 
 def contains(seq, item):
     return seq.__contains__(item)

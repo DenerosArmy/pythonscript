@@ -39,8 +39,29 @@ class tuple(object):
               """)
         return False
 
+    def __iter__(self):
+        return self._items
 
-t = tuple([1, 2, 3])
+    def __str__(self):
+        res = "("
+        js("""for (var index in self._items) {
+                  res += '' + self._items[index] + ','
+              }
+              """)
+        res = res + ')' # TODO: why does += not work here?
+        return res
+
+t = (1, 2, 3)
 print "length of tuple", py.len(t)
 print "Tuple contains 2?", py.contains(t, 2)
 print "Tuple contains 5?", py.contains(t, 5)
+print "Tuple iteratior is:", py.iter(t)
+print "Tuple string is:", py.str(t)
+
+
+# t = list([1, 2, 3, 4])
+# print "length of list", py.len(t)
+# print "List contains 2?", py.contains(t, 2)
+# print "List contains 5?", py.contains(t, 5)
+# print "List iteratior is:", py.iter(t)
+# print "List string is:", py.str(t)

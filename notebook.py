@@ -351,6 +351,13 @@ def _pass(obj):
 def _list(obj):
     return js_ast.List(map(convert, obj.elts))
 
+@converts(ast.Tuple)
+def _tuple(obj):
+    return js_ast.Call(js_ast.Name('tuple'), [
+        js_ast.List([js_ast.List(map(convert, obj.elts))]),
+        js_ast.Dict([], [])
+        ])
+
 class InstanceMethodTransformer(ast.NodeTransformer):
     def visit_FunctionDef(self, node):
         node.decorator_list.append(ast.Name('py.instancemethod', None))
