@@ -65,7 +65,7 @@ class Function(Statement):
         self.body = body
 
     def __str__(self):
-        string = "function {0}(".format(self.name)
+        string = "function {0} (".format(self.name)
         for arg in self.args:
             string += str(arg) + ", "
         string = string[:-2] + ") {\n"
@@ -82,7 +82,7 @@ class Return(Statement):
         """
         self.value = value
 
-    def __str(self):
+    def __str__(self):
         return "return {0};".format(self.value)
 
 
@@ -249,6 +249,8 @@ class Dict(Expression):
         string = "{"
         for i in xrange(len(self.keys)):
             string += "{0}:{1}, ".format(self.keys[i], self.values[i])
+        if string == "{":
+            return "{}"
         return string[:-2] + "}"
 
 
@@ -328,6 +330,8 @@ class List(Expression):
         string = "["
         for elem in self.elems:
             string += "{0}, ".format(elem)
+        if string == "[":
+            return "[]"
         return string[:-2] + "]"
 
 
@@ -340,7 +344,7 @@ class BoolOp(object):
         self.op = op
 
     def __str__(self):
-        return str(self.op)
+        return self.op
 
 
 class BinOp(object):
@@ -352,7 +356,7 @@ class BinOp(object):
         self.op = op
 
     def __str__(self):
-        return str(self.op)
+        return self.op
 
 
 class UnaryOp(object):
@@ -376,4 +380,4 @@ class CompareOp(object):
         self.op = op
 
     def __str__(self):
-        return ""
+        return self.op
