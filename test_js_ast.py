@@ -11,12 +11,12 @@ class JavascriptASTTest(TestCase):
 
     def test_function(self):
         function = Function(["arg0", "arg1"], ["body0", "body1"])
-        self.assertEqual(str(function), "function (arg0, arg1) {\n    body0;\n    body1;\n}")
+        self.assertEqual(str(function), "function (arg0, arg1) {\n    body0\n    body1\n}")
 
 
     def test_function_no_args(self):
         function = Function([], ["body0", "body1"])
-        self.assertEqual(str(function), "function () {\n    body0;\n    body1;\n}")
+        self.assertEqual(str(function), "function () {\n    body0\n    body1\n}")
 
 
     def test_return(self):
@@ -34,6 +34,12 @@ class JavascriptASTTest(TestCase):
         self.assertEqual(str(assign), "x = 1")
 
 
+    def test_aug_assign(self):
+        op = BinOp("+")
+        aug_assign = AugAssign("x", op, 1)
+        self.assertEqual(str(aug_assign), "x += 1")
+
+
     def test_print_empty(self):
         print_node = Print("")
         self.assertEqual(str(print_node), "console.log()")
@@ -48,18 +54,18 @@ class JavascriptASTTest(TestCase):
 
 
     def test_for(self):
-        for_node = For("i=0", "i<10", "i++", ["func()"])
-        self.assertEqual(str(for_node), "for (i=0; i<10; i++) {\n    func();\n}")
+        for_node = For("i", "iterable", ["func()"])
+        self.assertEqual(str(for_node), "for (i in iterable) {\n    func()\n}")
 
 
     def test_while(self):
         while_node = While("a=b", ["func()"])
-        self.assertEqual(str(while_node), "while (a=b) {\n    func();\n}")
+        self.assertEqual(str(while_node), "while (a=b) {\n    func()\n}")
 
 
     def test_if(self):
         if_node = If("a=b", ["func()"], ["func()"])
-        self.assertEqual(str(if_node), "if (a=b) {\n    func();\n} else {\n    func();\n}")
+        self.assertEqual(str(if_node), "if (a=b) {\n    func()\n} else {\n    func()\n}")
 
 
     def test_bool(self):

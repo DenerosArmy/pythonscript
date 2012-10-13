@@ -151,6 +151,21 @@ class Assign(Statement):
         return "{0} = {1}".format(self.target, self.value)
 
 
+class AugAssign(Statement):
+    def __init__(self, target, op, value):
+        """
+        @type target: L{Name}
+        @type op: L{BinOp}
+        @type target: L{Expression}
+        """
+        self.target = target
+        self.op = op
+        self.value = value
+
+    def __str__(self):
+        return "{0} {1}= {2}".format(self.target, self.op, self.value)
+
+
 class Print(Statement):
     def __init__(self, value):
         """
@@ -176,7 +191,7 @@ class For(Statement):
         self.body = body
 
     def __str__(self):
-        string = "for (var {0} in {1}) {{\n".format(self.target, self.iterable)
+        string = "for ({0} in {1}) {{\n".format(self.target, self.iterable)
         for elem in self.body:
             if type(elem) != NullStatement and str(elem) != "":
                 lines = str(elem).split("\n")

@@ -88,7 +88,14 @@ def assign(obj):
     assert len(obj.targets) == 1, "Multi-assignment not supported"
     assert type(obj.targets) != ast.Tuple, "Tuple assignment not supported"
     return js_ast.Assign(convert(obj.targets[0]), convert(obj.value))
-        
+
+
+@converts(ast.AugAssign)
+def aug_assign(obj):
+    target = convert(obj.op)
+    op = convert(obj.op)
+    value = convert(obj.value)
+    return js_ast.Assign(target, op, value)
 
 # <codecell>
 
