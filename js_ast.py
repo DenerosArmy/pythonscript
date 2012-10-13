@@ -29,6 +29,32 @@ class Statement(object):
         pass
 
 
+class RawExpression(Expression):
+    def __init__(self, exp):
+        """
+        @type exp: C{str}
+        """
+        self.exp = exp
+
+    def __str__(self):
+        return self.exp
+
+
+class RawStatement(statement):
+    def __init__(self, stmt):
+        """
+        @type exp: C{str}
+        """
+        self.stmt= stmt
+
+    def __str__(self):
+        return self.stmt
+
+
+class RawStatement(Statement):
+    pass
+
+
 class Function(Statement):
     def __init__(self, name, args, body):
         """
@@ -64,6 +90,21 @@ class Return(Statement):
         return "return {0};".format(self.value)
 
 
+class DeclareVar(Statement):
+    def __init__(self, variables):
+        """
+        @type var: C{list}
+        @param var: list of L{names}
+        """
+        self.variables = variables
+
+    def __str__(self):
+        string = "var "
+        for var in variables
+            string += "{0}, ".format(var)
+        return string[:-2]
+
+
 class Assign(Statement):
     def __init__(self, target, value):
         """
@@ -85,7 +126,7 @@ class Print(Statement):
         self.values = values
 
     def __str__(self):
-        return ""
+        return "console.log({0});".format(self.values)
 
 
 class For(Statement):
