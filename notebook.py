@@ -86,13 +86,23 @@ def assign(obj):
     assert len(obj.targets) == 1, "Multi-assignment not supported"
     assert type(obj.targets) != ast.Tuple, "Tuple assignment not supported"
     return js_ast.Assign(convert(obj.targets[0]), convert(obj.value))
-        
+
+@converts(ast.Attribute)
+def attribute(obj):
+    return js_ast.Name(obj.value.id + "." + obj.attr)
 
 # <codecell>
 
 @converts(ast.Name)
 def name(obj):
-    return js_ast.Name(obj.id)
+    n = obj.id
+    if n == 'True':
+        n = 'true'
+    elif n == 'False':
+        n = 'false'
+    elif n == 'None':
+        n = 'null'
+    return js_ast.Name(n)
 
 # <codecell>
 
