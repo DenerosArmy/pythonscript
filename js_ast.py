@@ -328,6 +328,8 @@ class Call(Expression):
 
     def __str__(self):
         string = "{0} (".format(self.func)
+        if len(self.args) == 0:
+            return string + ")"
         for arg in self.args:
             string += str(arg) + ", "
         return string[:-2] + ")"

@@ -219,6 +219,8 @@ def _def(obj):
     passed_args.append(the_fn)
     
     the_def = js_ast.Call(js_ast.Name("py.def"), passed_args)
+    if name[:15] == "lambda_function":
+        return the_def
     return js_ast.Assign(js_ast.Name(name), the_def)
 
 # <codecell>
