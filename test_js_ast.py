@@ -8,14 +8,26 @@ class JavascriptASTTest(TestCase):
         module = Module(["test_statement1", "test_statement2"])
         self.assertEqual(str(module), "test_statement1\ntest_statement2\n")
 
+
     def test_function(self):
         function = Function("func", ["arg0", "arg1"], ["body0", "body1"])
         self.assertEqual(str(function), "function func (arg0, arg1) {\n    body0;\n    body1;\n}")
 
+
     def test_return(self):
         return_node = Return("1")
-        print return_node
         self.assertEqual(str(return_node), "return 1;")
+
+
+    def test_declare_var(self):
+        declaration = DeclareVar(["a", "b", "c"])
+        self.assertEqual(str(declaration), "var a, b, c")
+
+
+    def test_assign(self):
+        assign = Assign("x", 1)
+        self.assertEqual(str(assign), "x = 1")
+
 
     def test_if(self):
         if_node = If("a=b", ["func()"], ["func()"])

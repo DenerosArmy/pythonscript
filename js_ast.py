@@ -305,7 +305,7 @@ class Str(Expression):
         self.value = value
 
     def __str__(self):
-        return ""
+        return self.value
 
 
 class Name(Expression):
