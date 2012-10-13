@@ -9,6 +9,14 @@ function runtime_exception() {
    //console.trace("Run Time Error"); 
    throw("GOOD BYE");
 };
+function map(args,dict) {
+    input_func = args[0];
+    iterable = args[1];
+    output = [];
+    for (i in iterable) {
+       output.push(input_func(iterable[i])); 
+    }
+}
 function def() { 
     if (arguments.length < 1) { 
         compile_exception();
