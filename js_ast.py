@@ -51,10 +51,6 @@ class RawStatement(Statement):
         return self.stmt
 
 
-class RawStatement(Statement):
-    pass
-
-
 class Function(Statement):
     def __init__(self, name, args, body):
         """
@@ -162,7 +158,7 @@ class While(Statement):
 
     def __str__(self):
         string = "while ({0}) {\n".format(self.condition)
-        for elem in body:
+        for elem in self.body:
             string += "    {0};\n".format(elem)
         return string + "}"
 
@@ -245,10 +241,12 @@ class Dict(Expression):
         @type keys: C{list}
         @type values: C{list}
         """
+        assert len(keys) == len(values)
         self.keys = keys
         self.values = values
 
     def __str__(self):
+
         return ""
 
 
