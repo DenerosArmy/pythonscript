@@ -5,22 +5,16 @@ TryCatch(Statement)
 
 
 class Expression(object):
-    pass
+    def __init__(self):
+        pass
 
 
 class Statement(object):
-    pass
+    def __init__(self):
+        pass
 
 
-class Name(object):
-    def __init__(self, name):
-        """
-        @type name: C{str}
-        """
-        self.name = name
-
-
-class FunctionDef(Statement):
+class Function(Statement):
     def __init__(self, name, args, body):
         """
         @type name: C{str}
@@ -97,3 +91,119 @@ class If(Statement):
         self.condition = condition
         self.if_body = if_body
         self.else_body = else_body
+
+
+class Bool(Expression):
+    def __init__(self, op, values):
+        """
+        @type op: L{BoolOp}
+        @type values: C{list}
+        @param values: list of L{Expression}
+        """
+        self.op = op
+        self.values = values
+
+
+class Bin(Expression):
+    def __init__(self, op, left, right):
+        """
+        @type op: L{BinOp}
+        @type left: L{Expression}
+        @type right: L{Expression}
+        """
+
+
+class Unary(Expression):
+    def __init__(self, op, values):
+        """
+        @type op: L{UnaryOp}
+        @type values: C{list}
+        @param values: list of L{Expression}
+        """
+        self.op = op
+        self.values = values
+
+
+class Dict(Expression):
+    def __init__(self, keys, values):
+        """
+        @type keys: C{list}
+        @type values: C{list}
+        """
+        self.keys = keys
+        self.values = values
+
+
+class Compare(Expression):
+    def __init__(self, op, left, right):
+        """
+        @type op: L{CompareOp}
+        @type left: L{Expression}
+        @type right: L{Expression}
+        """
+        self.op = op
+        self.left = left
+        self.right = right
+
+
+class Call(Expression):
+    def __init__(self, func, args):
+        """
+        @type func: L{Function}
+        @type args: C{list}
+        @param args: list of L{Expression}
+        """
+        self.func = func
+        self.args = args
+
+
+class Num(Expression):
+    def __init__(self, value):
+        """
+        @type value: C{int} or C{float}
+        """
+        self.value = value
+
+
+class Str(Expression):
+    def __init__(self, value):
+        """
+        @type value: C{str}
+        """
+        self.value = value
+
+
+class Name(Expression):
+    def __init__(self, name):
+        """
+        @type name: C{str}
+        """
+        self.name = name
+
+
+class List(Expression):
+    def __init__(self, elem):
+        """
+        @type elem: C{list}
+        @param elem: list of C{Expression}
+        """
+        self.elem = elem
+
+
+
+class BoolOp(object):
+    def __init__(self, op):
+        """
+        @type op: C{str}
+        """
+        assert op in ("||", "$$")
+        self.op = op
+
+
+class UnaryOp(object):
+    def __init__(self, op):
+        """
+        @type op: C{str}
+        """
+        assert op in ("!")
+        self.op = op
