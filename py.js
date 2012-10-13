@@ -11,7 +11,7 @@ function runtime_exception() {
 };
 function def() { 
     if (arguments.length < 1) { 
-        exception();
+        compile_exception();
     };
     var py_func = arguments[arguments.length - 1];
     var py_defaults = arguments[arguments.length - 2];

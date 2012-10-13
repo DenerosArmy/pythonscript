@@ -3,3 +3,5 @@ def lambda_function2():
     a = 1
     for i in [1,2,3,4]:
         print i
+    js.document.write("asdf")
+

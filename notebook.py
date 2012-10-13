@@ -86,13 +86,21 @@ def num(obj):
 
 @converts(ast.Call)
 def call(obj):
-    func = convert(obj.func)
+    func_name = ""
+    temp = obj.func
+    while type(temp) == ast.Attribute:
+        func_name = str(temp.attr) + "." + func_name
+        temp = temp.value
+    func_name = str(temp.id) + "." + func_name
+    
+    func = js_ast.Name(func_name[:-1]) 
+
     if str(func) == 'js':
         assert len(obj.args) == 1, "Cannot call 'js' built-in with more than one argument"
         s = obj.args[0]
         assert type(s) == ast.Str, "Cannot call 'js' built-in with non-string argument"
         return js_ast.RawExpression(s.s)
-    args = js_ast.List(map(convert, obj.args))
+    args = map(convert, obj.args)
     kwargs_explicit = {kw.arg: convert(kw.value) for kw in obj.keywords }
     kwargs_dict = obj.kwargs
     if kwargs_explicit and kwargs_dict:
@@ -101,6 +109,9 @@ def call(obj):
         kwargs = convert(kwargs_dict)
     else:
         kwargs = js_ast.Dict(kwargs_explicit.keys(), kwargs_explicit.values())
+
+    if func_name[:3] == "js.":
+        return js_ast.Call(js_ast.Name(func_name[3:-1]), args)
     
     return js_ast.Call(func, [args, kwargs])
 
