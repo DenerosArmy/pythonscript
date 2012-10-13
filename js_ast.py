@@ -15,7 +15,7 @@ class Module(object):
     def __str__(self):
         string = ""
         for stmt in self.body:
-            string += "{0}\n".format(stmt)
+            string += "{0};\n".format(stmt)
         return string
 
 
@@ -51,10 +51,6 @@ class RawStatement(Statement):
         return self.stmt
 
 
-class RawStatement(Statement):
-    pass
-
-
 class Function(Statement):
     def __init__(self, name, args, body):
         """
@@ -69,10 +65,14 @@ class Function(Statement):
         self.body = body
 
     def __str__(self):
-        string = "function {0}(".format(self.name)
-        for arg in self.args:
-            string += arg + ", "
-        string = string[:-2] + ") {\n"
+        string = "function {0} (".format(self.name)
+        if len(self.args) > 0:
+            for arg in self.args:
+                string += str(arg) + ", "
+            string = string[:-2] + ") {\n"
+        else:
+            string += ") {\n"
+
         for stmt in self.body:
             string += "    {0};\n".format(stmt)
         string += "}"
@@ -86,7 +86,7 @@ class Return(Statement):
         """
         self.value = value
 
-    def __str(self):
+    def __str__(self):
         return "return {0};".format(self.value)
 
 
@@ -100,7 +100,7 @@ class DeclareVar(Statement):
 
     def __str__(self):
         string = "var "
-        for var in variables:
+        for var in self.variables:
             string += "{0}, ".format(var)
         return string[:-2]
 
@@ -119,18 +119,18 @@ class Assign(Statement):
 
 
 class Print(Statement):
-    def __init__(self, values):
+    def __init__(self, value):
         """
-        @type value: C{str}
+        @type value: anything that can be printed
         """
-        self.values = values
+        self.value = value
 
     def __str__(self):
-        return "console.log({0});".format(self.values)
+        return "console.log({0})".format(self.value)
 
 
 class For(Statement):
-    def __init__(self, iter_var, condition, body, orelse):
+    def __init__(self, iter_var, condition, inc, body):
         """
         @type iter_var: L{Statement}
         @type condition: L{Expression}
@@ -141,11 +141,11 @@ class For(Statement):
         self.iter_var = iter_var
         self.condition = condition
         self.body = body
-        self.orelse = orelse
+        self.inc = inc
 
     def __str__(self):
-        string = "for ({0}; {1}; {2}) {\n".format(iter_var, condition, orelse)
-        for elem in body:
+        string = "for ({0}; {1}; {2}) {{\n".format(self.iter_var, self.condition, self.inc)
+        for elem in self.body:
             string += "    {0};\n".format(elem)
         return string + "}"
 
@@ -161,8 +161,8 @@ class While(Statement):
         self.body = body
 
     def __str__(self):
-        string = "while ({0}) {\n".format(self.condition)
-        for elem in body:
+        string = "while ({0}) {{\n".format(self.condition)
+        for elem in self.body:
             string += "    {0};\n".format(elem)
         return string + "}"
 
@@ -181,12 +181,12 @@ class If(Statement):
         self.else_body = else_body
 
     def __str__(self):
-        string = "if ({0}) {\n".format(self.condition)
-        for elem in if_body:
+        string = "if ({0}) {{\n".format(self.condition)
+        for elem in self.if_body:
             string += "    {0};\n".format(elem)
-        if else_body:
+        if self.else_body:
             string += "} else {\n"
-            for elem in else_body:
+            for elem in self.else_body:
                 string += "    {0};\n".format(elem)
         return string + "}"
 
@@ -205,7 +205,7 @@ class Bool(Expression):
         string = ""
         for val in self.values:
             string += "{0} {1} ".format(val, self.op)
-        return string[:-3]
+        return string[:-4]
 
 
 class Bin(Expression):
@@ -226,17 +226,19 @@ class Bin(Expression):
 
 
 class Unary(Expression):
-    def __init__(self, op, values):
+    def __init__(self, op, value):
         """
         @type op: L{UnaryOp}
         @type values: C{list}
         @param values: list of L{Expression}
         """
         self.op = op
-        self.values = values
+        self.value = value
 
     def __str__(self):
-        return ""
+        if len(self.value.split()) == 1:
+            return "{0}{1}".format(self.op, self.value)
+        return "{0}({1})".format(self.op, self.value)
 
 
 class Dict(Expression):
@@ -245,11 +247,17 @@ class Dict(Expression):
         @type keys: C{list}
         @type values: C{list}
         """
+        assert len(keys) == len(values)
         self.keys = keys
         self.values = values
 
     def __str__(self):
-        return ""
+        string = "{"
+        for i in xrange(len(self.keys)):
+            string += "{0}:{1}, ".format(self.keys[i], self.values[i])
+        if string == "{":
+            return "{}"
+        return string[:-2] + "}"
 
 
 class Compare(Expression):
@@ -264,13 +272,13 @@ class Compare(Expression):
         self.right = right
 
     def __str__(self):
-        return ""
+        return "{0} {1} {2}".format(self.left, self.op, self.right)
 
 
 class Call(Expression):
     def __init__(self, func, args):
         """
-        @type func: L{Function}
+        @type func: L{Name}
         @type args: C{list}
         @param args: list of L{Expression}
         """
@@ -278,7 +286,10 @@ class Call(Expression):
         self.args = args
 
     def __str__(self):
-        return ""
+        string = "{0} (".format(self.func)
+        for arg in self.args:
+            string += str(arg) + ", "
+        return string[:-2] + ")"
 
 
 class Num(Expression):
@@ -300,7 +311,7 @@ class Str(Expression):
         self.value = value
 
     def __str__(self):
-        return ""
+        return '"{0}"'.format(self.value)
 
 
 class Name(Expression):
@@ -314,15 +325,20 @@ class Name(Expression):
         return str(self.name)
 
 class List(Expression):
-    def __init__(self, elem):
+    def __init__(self, elems):
         """
         @type elem: C{list}
         @param elem: list of C{Expression}
         """
-        self.elem = elem
+        self.elems = elems
 
     def __str__(self):
-        return ""
+        string = "["
+        for elem in self.elems:
+            string += "{0}, ".format(elem)
+        if string == "[":
+            return "[]"
+        return string[:-2] + "]"
 
 
 class BoolOp(object):
@@ -330,11 +346,11 @@ class BoolOp(object):
         """
         @type op: C{str}
         """
-        assert op in ("||", "$$")
+        assert op in ("||", "&&")
         self.op = op
 
     def __str__(self):
-        return str(self.op)
+        return self.op
 
 
 class BinOp(object):
@@ -346,7 +362,7 @@ class BinOp(object):
         self.op = op
 
     def __str__(self):
-        return str(self.op)
+        return self.op
 
 
 class UnaryOp(object):
@@ -354,11 +370,11 @@ class UnaryOp(object):
         """
         @type op: C{str}
         """
-        assert op in ("!")
+        assert op in ("!", "~")
         self.op = op
 
     def __str__(self):
-        return ""
+        return self.op
 
 
 class CompareOp(object):
@@ -370,4 +386,4 @@ class CompareOp(object):
         self.op = op
 
     def __str__(self):
-        return ""
+        return self.op
