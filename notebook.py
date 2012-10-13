@@ -92,10 +92,6 @@ def assign(obj):
         target = js_ast.Name(str(target)[3:])
     return js_ast.Assign(target, convert(obj.value))
 
-@converts(ast.Attribute)
-def attribute(obj):
-    return js_ast.Name(str(convert(obj.value)) + "." + obj.attr)
-
 @converts(ast.AugAssign)
 def aug_assign(obj):
     target = convert(obj.target)
@@ -109,9 +105,16 @@ def aug_assign(obj):
 # <codecell>
 
 @converts(ast.Attribute)
-def attirbute(obj):
+def attribute(obj):
     value = convert(obj.value)
     return js_ast.Attribute(value, obj.attr)
+
+@converts(ast.Subscript)
+def subscript(obj):
+    value = convert(obj.value)
+    _slice = convert(obj.slice.value)
+    return js_ast.Subscript(value, _slice)
+
 
 @converts(ast.Name)
 def name(obj):
@@ -290,9 +293,6 @@ def _def(obj):
 
     for decorator in reversed(obj.decorator_list):
         the_def = js_ast.Call(convert(decorator), [js_ast.List([the_def]), js_ast.Dict([], [])])
-
-    if str(name)[:15] == "lambda_function":
-        return the_def
 
     return js_ast.Assign(name, the_def)
 

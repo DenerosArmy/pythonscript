@@ -391,6 +391,19 @@ class Attribute(Expression):
         return "{0}.{1}".format(self.value, self.attr)
 
 
+class Subscript(Expression):
+    def __init__(self, value, index):
+        """
+        @type value: L{Name}
+        @type index: C{Expression}
+        """
+        self.value = value
+        self.index = index
+
+    def __str__(self):
+        return "{0}[{1}]".format(self.value, self.index)
+
+
 class Name(Expression):
     def __init__(self, name):
         """
