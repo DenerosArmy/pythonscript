@@ -10,5 +10,6 @@ js.py.instancemethod = instancemethod
 def contains(seq, item):
     return seq.__contains__(item)
 
+#js.exports = js("{}")
 js.exports.instancemethod = instancemethod
 js.exports.contains = contains

@@ -19,14 +19,14 @@ def lambda_function1():
     backcontext = js.back.getContext('2d')
     cw = None
     ch = None
-    v.addEventListener('play',lambda_function2,False)
+    js.v.addEventListener('play',lambda_function2,False)
 
 js.document.addEventListener('DOMContentLoaded',lambda_function1,False)
 
 def draw(v,c,bc,w,h,value):
     if (v.paused or v.ended):return False 
-    bc.drawImage(v,0,0,w,h)
-    idata = bc.getImageData(0,0,w,h)
+    js.bc.drawImage(v,0,0,w,h)
+    idata = js.bc.getImageData(0,0,w,h)
     data = idata.data 
     for i in range(0,data.length,4):
         r = data[i]
@@ -37,11 +37,11 @@ def draw(v,c,bc,w,h,value):
         data[i+2] = b * vidData[0] * vidData[3]
     idata.data = data
 
-    c.putImageData(idata,0,0)
-    c.putImageData(idata,0,0) 
+    js.c.putImageData(idata,0,0)
+    js.c.putImageData(idata,0,0) 
     def lambda_function3():
         draw(v,c,bc,w,h,value) 
-    drawTimeout = setTimeout(lambda_function3)
+    drawTimeout = js.setTimeout(lambda_function3, 0)
 
 
 def changeVideo(attribute,direction):
