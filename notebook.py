@@ -59,7 +59,9 @@ def convert(obj, semis=True):
         return None
 
 class Visitor(ast.NodeVisitor):
-    local_vars = []
+    def __init__(self):
+        self.local_vars = []
+        self.nonlocal_vars = []
     def visit_Assign(self, node):
         for target in node.targets:
             if isinstance(target, ast.Name):
@@ -68,14 +70,26 @@ class Visitor(ast.NodeVisitor):
     def visit_For(self, node):
         self.local_vars.append(node.target.id)
 
+    def visit_FunctionDef(self, node):
+        pass
+
+    def visit_Global(self, node):
+        self.nonlocal_vars.extend(node.names)
+
+    def get_local_vars(self):
+        return list(set(self.local_vars) - set(self.nonlocal_vars))
 
 def find_locals(body):
+    v = Visitor()
     for elem in body:
-        v = Visitor()
         v.visit(elem)
-    return v.local_vars
+    return v.get_local_vars()
 
 # <codecell>
+
+@converts(ast.Global)
+def module(obj):
+    return js_ast.NullStatement()
 
 @converts(ast.Module)
 def module(obj, semis=True):
