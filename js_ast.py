@@ -181,12 +181,12 @@ class If(Statement):
         self.else_body = else_body
 
     def __str__(self):
-        string = "if ({0}) {\n".format(self.condition)
-        for elem in if_body:
+        string = "if ({0}) {{\n".format(self.condition)
+        for elem in self.if_body:
             string += "    {0};\n".format(elem)
-        if else_body:
+        if self.else_body:
             string += "} else {\n"
-            for elem in else_body:
+            for elem in self.else_body:
                 string += "    {0};\n".format(elem)
         return string + "}"
 
@@ -205,7 +205,7 @@ class Bool(Expression):
         string = ""
         for val in self.values:
             string += "{0} {1} ".format(val, self.op)
-        return string[:-3]
+        return string[:-4]
 
 
 class Bin(Expression):
@@ -278,7 +278,10 @@ class Call(Expression):
         self.args = args
 
     def __str__(self):
-        return ""
+        string = "{0} (".format(self.func)
+        for arg in self.args:
+            string += arg + ", "
+        return string[:-2] + ")"
 
 
 class Num(Expression):
@@ -314,15 +317,18 @@ class Name(Expression):
         return str(self.name)
 
 class List(Expression):
-    def __init__(self, elem):
+    def __init__(self, elems):
         """
         @type elem: C{list}
         @param elem: list of C{Expression}
         """
-        self.elem = elem
+        self.elems = elems
 
     def __str__(self):
-        return ""
+        string = "["
+        for elem in self.elems:
+            string += "{0}, ".format(elem)
+        return string[:-2] + "]"
 
 
 class BoolOp(object):
