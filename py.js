@@ -39,6 +39,7 @@ function def() {
         py_func_args.pop();
     };
     function output_func(args,dict) {
+	  console.log("args are", args);
        var input_args = [];
        var i = 0;
        for (i=0;i<py_func_args.length;i++) {

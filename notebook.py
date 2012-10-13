@@ -9,6 +9,23 @@ import ast
 
 import js_ast
 
+class JsNodeVisitor(object):
+    def generic_visit(self, node):
+        for v in vars(node).values():
+            self.visit(v)
+
+    def visit(self, node):
+        if type(node) not in vars(js_ast).values():
+            if type(node) == list or type(node) == tuple:
+                for n in node:
+                    self.visit(n)
+            return
+        visitor = 'visit_' + node.__class__.__name__
+        try:
+            self.__getattribute__(visitor)(node)
+        except AttributeError:
+            self.generic_visit(node)
+
 # <codecell>
 
 def jsp(obj):
@@ -92,7 +109,14 @@ def call(obj):
         s = obj.args[0]
         assert type(s) == ast.Str, "Cannot call 'js' built-in with non-string argument"
         return js_ast.RawExpression(s.s)
-    args = js_ast.List(map(convert, obj.args))
+    args = map(convert, obj.args)
+    starargs = convert(obj.starargs)
+    if args and starargs:
+        assert False, "Both args and starargs not permitted" + str(args) + " " + str(starargs)
+    elif args:
+        args = js_ast.List(args)
+    elif starargs:
+        args = starargs
     kwargs_explicit = {kw.arg: convert(kw.value) for kw in obj.keywords }
     kwargs_dict = obj.kwargs
     if kwargs_explicit and kwargs_dict:
@@ -205,6 +229,7 @@ def _def(obj):
     
     assert not obj.decorator_list, "Decorators are not supported"
     local_vars = find_locals(obj.body)
+
     body = map(convert, obj.body)
     body.insert(0, js_ast.Vars(local_vars))
     
@@ -219,8 +244,14 @@ def _def(obj):
     passed_args.append(the_fn)
     
     the_def = js_ast.Call(js_ast.Name("py.def"), passed_args)
+
     if name[:15] == "lambda_function":
         return the_def
+    
+    for decorator in reversed(obj.decorator_list):
+        the_def = js_ast.Call(convert(decorator), [js_ast.List([the_def]), js_ast.Dict([], [])])
+    
+
     return js_ast.Assign(js_ast.Name(name), the_def)
 
 # <codecell>
@@ -274,3 +305,42 @@ def _for(obj):
     body = obj.body
     _iter = obj.iter
     return js_ast.For(convert(target), convert(_iter), map(convert, body))
+
+@converts(ast.Pass)
+def _pass(obj):
+    return js_ast.NullStatement()
+
+class InstanceMethodTransformer(ast.NodeTransformer):
+    def visit_FunctionDef(self, node):
+        node.decorator_list.append(ast.Name('instancemethod', None))
+        return node
+
+class AssignTransformer(JsNodeVisitor):
+    def visit_Assign(self, node):
+        node.target.name = 'this.' + str(node.target.name)
+
+class InitFinder(JsNodeVisitor):
+    def __init__(self):
+        self.found_init = False
+    def visit_Assign(self, node):
+        if str(node.target.name) == "this.__init__":
+            self.found_init = True
+        else:
+            self.generic_visit(node)
+
+@converts(ast.ClassDef)
+def _class(obj):
+    name = obj.name # String
+    bases = obj.bases # List of names
+    assert not obj.decorator_list, "Decorators on classes are not supported"
+    t = InstanceMethodTransformer()
+    t.visit(obj)
+    body = map(convert, obj.body)
+    v = AssignTransformer()
+    v.visit(body)
+    f = InitFinder()
+    f.visit(body)
+    if f.found_init:
+        print 'FOUND INIT'
+        body.append(js_ast.Call(js_ast.Name('this.__init__'), []))
+    return js_ast.Assign(js_ast.Name(name), js_ast.Function([], body))
