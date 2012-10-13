@@ -98,6 +98,7 @@ function is_empty(ob){
    for(var i in ob){ return false;}
   return true;
 }
+exports = {}
 exports.get_param_names = get_param_names;
 exports.def = def;
 exports.kwargs = kwargs;
