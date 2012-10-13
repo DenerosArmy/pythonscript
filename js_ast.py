@@ -12,6 +12,12 @@ class Module(object):
         """
         self.body = body
 
+    def __str__(self):
+        string = ""
+        for stmt in self.body:
+            string += "{0}\n".format(stmt)
+        return string
+
 
 class Expression(object):
     def __init__(self):
@@ -26,14 +32,25 @@ class Statement(object):
 class Function(Statement):
     def __init__(self, name, args, body):
         """
-        @type name: C{str}
-        @type args: C{tuple}
+        @type name: L{Name}
+        @type args: C{list}
+        @param args: list of L{Name}
         @type body: C{list}
         @param body: list of L{Statement}
         """
         self.name = name
         self.args = args
         self.body = body
+
+    def __str__(self):
+        string = "function {0}(".format(self.name)
+        for arg in self.args:
+            string += arg + ", "
+        string = string[:-2] + ") {\n"
+        for stmt in self.body:
+            string += "    {0};\n".format(stmt)
+        string += "}\n"
+        return string
 
 
 class Return(Statement):
@@ -45,7 +62,7 @@ class Return(Statement):
 
 
 class Assign(Statement):
-    def __init__(self, target, value)
+    def __init__(self, target, value):
         """
         @type target: L{Expression}
         @type value: L{Expression}
