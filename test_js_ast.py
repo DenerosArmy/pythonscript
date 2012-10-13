@@ -135,6 +135,12 @@ class JavascriptASTTest(TestCase):
         self.assertEqual(str(attr2), "a.b.c")
 
 
+    def test_subscript(self):
+        name = Name("a")
+        subscript_node = Subscript(name, 1)
+        self.assertEqual(str(subscript_node), "a[1]")
+
+
     def test_name(self):
         name_node = Name("a")
         self.assertEqual(str(name_node), "a")
