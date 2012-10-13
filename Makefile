@@ -13,6 +13,7 @@ programs:
 	python js.py py/factorial.py > js/factorial.js
 	python js.py py/in_1.py > js/in_1.js
 	python js.py py/in_2.py > js/in_2.js
+	python js.py py/complicated.py > js/complicated.js
 
 clean:
 	rm js/*.js
