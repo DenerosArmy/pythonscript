@@ -157,7 +157,7 @@ class While(Statement):
         self.body = body
 
     def __str__(self):
-        string = "while ({0}) {\n".format(self.condition)
+        string = "while ({0}) {{\n".format(self.condition)
         for elem in self.body:
             string += "    {0};\n".format(elem)
         return string + "}"
