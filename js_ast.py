@@ -100,7 +100,7 @@ class DeclareVar(Statement):
 
     def __str__(self):
         string = "var "
-        for var in variables:
+        for var in self.variables:
             string += "{0}, ".format(var)
         return string[:-2]
 
@@ -144,8 +144,8 @@ class For(Statement):
         self.orelse = orelse
 
     def __str__(self):
-        string = "for ({0}; {1}; {2}) {\n".format(iter_var, condition, orelse)
-        for elem in body:
+        string = "for ({0}; {1}; {2}) {\n".format(self.iter_var, self.condition, self.orelse)
+        for elem in self.body:
             string += "    {0};\n".format(elem)
         return string + "}"
 
