@@ -21,7 +21,7 @@ class JavascriptASTTest(TestCase):
 
     def test_return(self):
         return_node = Return("1")
-        self.assertEqual(str(return_node), "return 1;")
+        self.assertEqual(str(return_node), "return 1")
 
 
     def test_declare_var(self):
@@ -100,11 +100,31 @@ class JavascriptASTTest(TestCase):
 
     def test_compare(self):
         op = CompareOp(">")
+        compare_node = Compare(op, "1", "2")
+        self.assertEqual(str(compare_node), "1 > 2")
+        op = CompareOp("==")
+        compare_node = Compare(op, "1", "2")
+        self.assertEqual(str(compare_node), "1 == 2")
 
 
     def test_call(self):
         call_node = Call("func", ["asdf", "asdf"])
         self.assertEqual(str(call_node), "func (asdf, asdf)")
+
+
+    def test_num(self):
+        num_node = Num(9)
+        self.assertEqual(str(num_node), "9")
+
+
+    def test_str(self):
+        str_node = Str("asdf")
+        self.assertEqual(str(str_node), '"asdf"')
+
+
+    def test_name(self):
+        name_node = Str("a")
+        self.assertEqual(str(name_node), "a")
 
 
     def test_empty_list(self):
@@ -114,8 +134,3 @@ class JavascriptASTTest(TestCase):
     def test_list(self):
         list_node = List(["a", "b", "c"])
         self.assertEqual(str(list_node), "[a, b, c]")
-
-
-    def test_str(self):
-        str_node = Str("asdf")
-        self.assertEqual(str(str_node), '"asdf"')

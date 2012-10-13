@@ -87,7 +87,7 @@ class Return(Statement):
         self.value = value
 
     def __str__(self):
-        return "return {0};".format(self.value)
+        return "return {0}".format(self.value)
 
 
 class DeclareVar(Statement):
