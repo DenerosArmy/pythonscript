@@ -1,5 +1,5 @@
 from pythonscript import js
-
+js('var py = require("./py")')
 js('console.log("Test in_2");')
 def in_2():
     return 1 + 2
