@@ -15,8 +15,13 @@ class Module(object):
     def __str__(self):
         string = ""
         for stmt in self.body:
-            if type(stmt) != NullStatement:
-                string += "{0};\n".format(stmt)
+            if type(stmt) != NullStatement and str(stmt) != "":
+                lines = str(stmt).split("\n")
+                for line in lines:
+                    if line[-1] not in ("{", "("):
+                        string += "{0};\n".format(line)
+                    else:
+                        string += "{0}\n".format(line)
         return string
 
 
@@ -79,10 +84,29 @@ class Function(Statement):
             string += ") {\n"
 
         for stmt in self.body:
-            if type(stmt) != NullStatement:
-                string += "    {0};\n".format(stmt)
+            if type(stmt) != NullStatement and str(stmt) != "":
+                lines = str(stmt).split("\n")
+                for line in lines:
+                    string += "    {0}\n".format(line)
         string += "}"
         return string
+
+
+class Vars(Statement):
+    def __init__(self, names):
+        """
+        @type names: C{list}
+        @param names: list of strings as local variable names
+        """
+        self.names = names
+
+    def __str__(self):
+        if len(self.names) == 0:
+            return ""
+        string = "var "
+        for name in self.names:
+            string += "{0}, ".format(name)
+        return string[:-2]
 
 
 class Return(Statement):
@@ -151,8 +175,10 @@ class For(Statement):
     def __str__(self):
         string = "for (var {0} in {1}) {{\n".format(self.target, self.iterable)
         for elem in self.body:
-            if type(elem) != NullStatement:
-                string += "    {0};\n".format(elem)
+            if type(elem) != NullStatement and str(elem) != "":
+                lines = str(elem).split("\n")
+                for line in lines:
+                    string += "    {0}\n".format(line)
         return string + "}"
 
 
@@ -169,8 +195,10 @@ class While(Statement):
     def __str__(self):
         string = "while ({0}) {{\n".format(self.condition)
         for elem in self.body:
-            if type(elem) != NullStatement:
-                string += "    {0};\n".format(elem)
+            if type(elem) != NullStatement and str(elem) != "":
+                lines = str(elem).split("\n")
+                for line in lines:
+                    string += "    {0}\n".format(line)
         return string + "}"
 
 
@@ -190,13 +218,17 @@ class If(Statement):
     def __str__(self):
         string = "if ({0}) {{\n".format(self.condition)
         for elem in self.if_body:
-            if type(elem) != NullStatement:
-                string += "    {0};\n".format(elem)
+            if type(elem) != NullStatement and str(elem) != "":
+                lines = str(elem).split("\n")
+                for line in lines:
+                    string += "    {0}\n".format(line)
         if self.else_body:
             string += "} else {\n"
             for elem in self.else_body:
-                if type(elem) != NullStatement:
-                    string += "    {0};\n".format(elem)
+                if type(elem) != NullStatement and str(elem) != "":
+                    lines = str(elem).split("\n")
+                    for line in lines:
+                        string += "    {0}\n".format(line)
         return string + "}"
 
 
@@ -296,6 +328,8 @@ class Call(Expression):
 
     def __str__(self):
         string = "{0} (".format(self.func)
+        if len(self.args) == 0:
+            return string + ")"
         for arg in self.args:
             string += str(arg) + ", "
         return string[:-2] + ")"

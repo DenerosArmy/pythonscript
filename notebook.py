@@ -39,6 +39,22 @@ def convert(obj):
     else:
         return None
 
+class Visitor(ast.NodeVisitor):
+    local_vars = []
+    def visit_Assign(self, node):
+        for target in node.targets:
+            self.local_vars.append(target.id)
+
+    def visit_For(self, node):
+        self.local_vars.append(node.target.id)
+
+
+def find_locals(body):
+    for elem in body:
+        v = Visitor()
+        v.visit(elem)
+    return v.local_vars
+
 # <codecell>
 
 @converts(ast.Module)
@@ -188,7 +204,9 @@ def _def(obj):
     #print 'Defaults', defaults
     
     assert not obj.decorator_list, "Decorators are not supported"
+    local_vars = find_locals(obj.body)
     body = map(convert, obj.body)
+    body.insert(0, js_ast.Vars(local_vars))
     
     passed_args = []
     if kwarg:
@@ -201,6 +219,8 @@ def _def(obj):
     passed_args.append(the_fn)
     
     the_def = js_ast.Call(js_ast.Name("py.def"), passed_args)
+    if name[:15] == "lambda_function":
+        return the_def
     return js_ast.Assign(js_ast.Name(name), the_def)
 
 # <codecell>
