@@ -99,7 +99,7 @@ def aug_assign(obj):
     value = convert(obj.value)
     if str(target).startswith('js.'):
         target = js_ast.Name(str(target)[3:])
-    return js_ast.Assign(target, op, value)
+    return js_ast.AugAssign(target, op, value)
 
 
 # <codecell>
