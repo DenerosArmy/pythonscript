@@ -19,11 +19,9 @@ if __name__ == '__main__':
 
 
     for opt, arg in opts:
-        print opt
         if opt in ("-n", "--no_semicolons"):
             semis = False
 
-    print semis
     filename = sys.argv[1]
     with open(filename) as f:
         t = ast.parse(f.read(), filename)
