@@ -144,7 +144,10 @@ class For(Statement):
         self.orelse = orelse
 
     def __str__(self):
-        return ""
+        string = "for ({0}; {1}; {2}) {\n".format(iter_var, condition, orelse)
+        for elem in body:
+            string += "    {0};\n".format(elem)
+        return string + "}"
 
 
 class While(Statement):
@@ -158,7 +161,10 @@ class While(Statement):
         self.body = body
 
     def __str__(self):
-        return ""
+        string = "while ({0}) {\n".format(self.condition)
+        for elem in body:
+            string += "    {0};\n".format(elem)
+        return string + "}"
 
 
 class If(Statement):
@@ -175,7 +181,14 @@ class If(Statement):
         self.else_body = else_body
 
     def __str__(self):
-        return ""
+        string = "if ({0}) {\n".format(self.condition)
+        for elem in if_body:
+            string += "    {0};\n".format(elem)
+        if else_body:
+            string += "} else {\n"
+            for elem in else_body:
+                string += "    {0};\n".format(elem)
+        return string + "}"
 
 
 class Bool(Expression):
@@ -207,6 +220,8 @@ class Bin(Expression):
         self.right = right
 
     def __str__(self):
+        if self.op in ("+", "-"):
+            return "({0} {1} {2})".format(self.left, self.op, self.right)
         return "{0} {1} {2}".format(self.left, self.op, self.right)
 
 
