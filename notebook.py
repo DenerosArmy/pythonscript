@@ -359,10 +359,13 @@ def _while(obj):
 def _for(obj):
     target = convert(obj.target)
     target_idx = js_ast.Name(str(target) + "_idx")
+    target_value = js_ast.Name(str(target) + "_val")
     _iter = convert(obj.iter)
     body = map(convert, obj.body)
-    body.insert(0, js_ast.Assign(target, js_ast.Subscript(_iter, target_idx)))
-    return js_ast.For(target_idx, _iter, body)
+    a = js_ast.Assign(target_value, _iter)
+    body.insert(0, js_ast.Assign(target, js_ast.Subscript(target_value, target_idx)))
+    real_for = js_ast.RawExpression(str(a) + "\n" + str(js_ast.For(target_idx, _iter, body)))
+    return real_for
 
 @converts(ast.Pass)
 def _pass(obj):
