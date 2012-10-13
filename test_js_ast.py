@@ -117,6 +117,16 @@ class JavascriptASTTest(TestCase):
         self.assertEqual(str(num_node), "9")
 
 
+    def test_str(self):
+        str_node = Str("asdf")
+        self.assertEqual(str(str_node), '"asdf"')
+
+
+    def test_name(self):
+        name_node = Str("a")
+        self.assertEqual(str(name_node), "a")
+
+
     def test_empty_list(self):
         list_node = List([])
         self.assertEqual(str(list_node), "[]")
@@ -124,8 +134,3 @@ class JavascriptASTTest(TestCase):
     def test_list(self):
         list_node = List(["a", "b", "c"])
         self.assertEqual(str(list_node), "[a, b, c]")
-
-
-    def test_str(self):
-        str_node = Str("asdf")
-        self.assertEqual(str(str_node), '"asdf"')
