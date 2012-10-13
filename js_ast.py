@@ -5,12 +5,15 @@ TryCatch(Statement)
 
 
 class Module(object):
-    def __init__(self, body):
+    def __init__(self, body, semis=True):
         """
         @type body: C{list}
         @param body: list of C{Statement}
+        @type semis: C{bool}
+        @para semis: whether or not to use semis
         """
         self.body = body
+        self.semis = semis
 
     def __str__(self):
         string = ""
@@ -18,7 +21,7 @@ class Module(object):
             if type(stmt) != NullStatement and str(stmt).strip() != "":
                 lines = str(stmt).split("\n")
                 for line in lines:
-                    if line[-1] not in ("{", "("):
+                    if line[-1] not in ("{", "(") and self.semis:
                         string += "{0};\n".format(line)
                     else:
                         string += "{0}\n".format(line)
