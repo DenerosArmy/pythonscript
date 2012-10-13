@@ -126,7 +126,7 @@ class Print(Statement):
 
 
 class For(Statement):
-    def __init__(self, iter_var, condition, body, orelse):
+    def __init__(self, iter_var, condition, inc, body):
         """
         @type iter_var: L{Statement}
         @type condition: L{Expression}
@@ -137,10 +137,10 @@ class For(Statement):
         self.iter_var = iter_var
         self.condition = condition
         self.body = body
-        self.orelse = orelse
+        self.inc = inc
 
     def __str__(self):
-        string = "for ({0}; {1}; {2}) {\n".format(self.iter_var, self.condition, self.orelse)
+        string = "for ({0}; {1}; {2}) {{\n".format(self.iter_var, self.condition, self.inc)
         for elem in self.body:
             string += "    {0};\n".format(elem)
         return string + "}"
