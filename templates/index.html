@@ -105,9 +105,10 @@ js.alert(factorial(10))</div>
 
                         function evals()
                         {
+
                         var text = editor2.getSession().getValue();
                         value = eval(text);
-                        
+                        }
 
                         }
 
@@ -117,10 +118,12 @@ js.alert(factorial(10))</div>
 
                     <script type="text/javascript">
                         var editor = ace.edit("editor");
+                        var execute = 0
 
 	                    function postserver()
 	                    {
-                                                    $('<p align="center"><a  href="javascript:void(0)" onclick="javascript:evals();" style="margin-top: 5px" class="btn tip  btn-success btn-large font-open-sans-normal" id="eval" title="Press to evaluate your JS code" >Evaluate <i class="icon-ok"></i></a></p>').hide().appendTo('#content2').fadeIn("medium");
+
+                        
 
                         var text = editor.getSession().getValue();
 		                $.get("/api", {"code":text }, function(data) {
@@ -216,12 +219,10 @@ js('console.log("End test in_1");')
                         <section class="sec-header">
                             <h3 class="font-bree-serif">Usage</h3>
 
-                            <p>Save the generated JS file and use the <code><abbr title="&lt;script&gt;">&lt;script src='yourpy.js'&gt;</abbr></code> tag (in your html <code>HEAD</code> section), then use the JS like any other function. You can even use jQuery functions (see the docs) :</p>
+                            <p>Save the generated JS file and use the <code><abbr title="&lt;script&gt;">&lt;script src='yourpy.js'&gt;</abbr></code> tag (in your html <code>HEAD</code> section), then use the JS like any other function. You can even use alert functions (see the docs) :</p>
                             <pre class="prettyprint linenums">
 &lt;script&gt;
-$(document).ready(function () {
-  $('.selector').aPlugin();
-});
+js.alert('Goodbye JS')
 &lt;/script&gt;
 </pre>
                         </section>
@@ -240,7 +241,7 @@ $(document).ready(function () {
         <div class="container">
             <div class="row">
                 <div class="span6">
-                    <p>&copy; Using Plugin-Documentation. </p>
+                    <p>&copy; </p>
                 </div>
 
                 <div class="span2 offset4">
