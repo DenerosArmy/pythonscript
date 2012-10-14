@@ -222,18 +222,30 @@ js('console.log("End test in_1");')
                         <section class="sec-header">
                             <h3 class="font-bree-serif">Usage</h3>
 
-                            <p>Save the generated JS file and use the <code><abbr title="&lt;script&gt;">&lt;script src='yourpy.js'&gt;</abbr></code> tag (in your html <code>HEAD</code> section), then use the JS like any other function. You can even use alert functions (see the docs) :</p>
+                            <p>Save the generated JS file and use the <code><abbr title="&lt;script&gt;">&lt;script src='yourpy.js'&gt;</abbr></code> tag (in your html <code>HEAD</code> section), then use the JS like any other function. You can even use alert functions (see the docs)</p>
                             <pre class="prettyprint linenums">
 &lt;script&gt;
 js.alert('Goodbye JS')
 &lt;/script&gt;
 </pre>
                         </section>
+<section class="sec-header">
+                            <h3 class="font-bree-serif">Requiremetnds</h3>
+
+                            <p>What you need:<br><code><abbr title="Python 2.7">Python 2.7</abbr></code> <br> Optional: <abbr title="Flask">Flask</abbr></code> for compiling on a web server and displaying the output (in html). Take the compiled JS and use it like any other script. The long term goal for this project is to be able to do something like this</p>
+                                                        <pre class="prettyprint linenums">
+&lt;script src="script.py" type="text/python"&gt;
+js.alert('Goodbye JS')
+&lt;/script&gt;
+</pre>
+
+                        </section>
+
                     </div><!--end howtouse-content-->
 
 
                     <div class="well align-center">
-                        <h4>For any queries or issues. <a href="#">Submit issues</a> on github</h4>
+                        <h4>For any queries or issues. <a href="https://github.com/DenerosArmy/pythonscript/issues">Submit issues</a> on github</h4>
                     </div><!--end well-->
                 </div><!--end span12-->
             </div><!--end row-->
