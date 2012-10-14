@@ -110,7 +110,6 @@ js.alert(factorial(10))</div>
                         value = eval(text);
                         }
 
-                        }
 
  
 
@@ -123,6 +122,10 @@ js.alert(factorial(10))</div>
 	                    function postserver()
 	                    {
 
+                            if (execute == 0) {
+                                                    $('<p align="center"><a  href="javascript:void(0)" onclick="javascript:evals();" style="margin-top: 5px" class="btn tip  btn-success btn-large font-open-sans-normal" id="eval" title="Press to evaluate your JS code" >Evaluate <i class="icon-ok"></i></a></p>').hide().appendTo('#content2').fadeIn("medium");
+                                                    execute = 1
+                                               }
                         
 
                         var text = editor.getSession().getValue();
