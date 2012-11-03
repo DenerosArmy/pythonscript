@@ -279,7 +279,7 @@ class Bin(Expression):
         self.right = right
 
     def __str__(self):
-        if self.op in ("+", "-"):
+        if str(self.op) in ("+", "-"):
             return "({0} {1} {2})".format(self.left, self.op, self.right)
         return "{0} {1} {2}".format(self.left, self.op, self.right)
 

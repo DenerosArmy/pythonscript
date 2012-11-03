@@ -80,10 +80,10 @@ class JavascriptASTTest(TestCase):
     def test_bin(self):
         op = BinOp("+")
         bin_node = Bin(op, "4", "5")
-        self.assertEqual(str(bin_node), "4 + 5")
+        self.assertEqual(str(bin_node), "(4 + 5)")
         op = BinOp("-")
         bin_node = Bin(op, "4", "5")
-        self.assertEqual(str(bin_node), "4 - 5")
+        self.assertEqual(str(bin_node), "(4 - 5)")
 
 
     def test_unary(self):
