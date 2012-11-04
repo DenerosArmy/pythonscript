@@ -21,7 +21,7 @@ class Module(object):
             if type(stmt) != NullStatement and str(stmt).strip() != "":
                 lines = str(stmt).split("\n")
                 for line in lines:
-                    if line[-1] not in ("{", "(") and self.semis:
+                    if line[-1] not in ("{", "(", "}") and self.semis:
                         string += "{0};\n".format(line)
                     else:
                         string += "{0}\n".format(line)
