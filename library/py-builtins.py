@@ -42,6 +42,50 @@ class tuple(object):
         res +=  ')'
         return res
 
+
+class list(object):
+    def __init__(self, items):
+        self._items = items
+        self._len = -1
+
+    def pop(self):
+        return self._items.shift()
+
+    def append(self, item):
+        return self._items.push(item)
+
+    def sort(self):
+        return self._items.sort()
+
+    def reverse(self):
+        self._items().reverse()
+
+    def __len__(self):
+        if self._len == -1:
+            count = 0
+            for elem in self._items:
+                count += 1
+            self._len = count
+            return count
+        else:
+            return self._len
+
+    def __contains__(self, item):
+        for other in self._items:
+            if item == other:
+                return True
+        return False
+
+    def __iter__(self):
+        return self._items
+
+    def __str__(self):
+        res = "["
+        for item in self._items:
+            res += '' + item + ','
+        res +=  ']'
+        return res
+
 def range(start, stop=None, step=1):
     if stop == None:
         stop = start
