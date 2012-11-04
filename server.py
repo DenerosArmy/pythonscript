@@ -20,10 +20,9 @@ def nocache(f):
 @nocache
 @app.route("/api", methods=['GET', 'POST'])
 def hello():
-	t = ast.parse(str(request.args['code']))
-	output = str(convert(t))
-	return jsonify(r=output)
-
+    t = ast.parse(str(request.args['code']))
+    output = str(convert(t))
+    return jsonify(r=output)
 
 
 #return str(request.args['callback'] + "({0})".format(output[:-2]))  
